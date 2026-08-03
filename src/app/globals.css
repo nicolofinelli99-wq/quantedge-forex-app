@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-head: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #060910;
+  color: #eef1f8;
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-head);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.font-mono-num {
+  font-family: var(--font-mono);
+}
+
+.grad-text {
+  background-image: linear-gradient(135deg, #00e5a0, #00c2ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass {
+  background: rgba(16, 24, 40, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  backdrop-filter: blur(20px);
+}
+
+::selection {
+  background: rgba(0, 229, 160, 0.35);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
