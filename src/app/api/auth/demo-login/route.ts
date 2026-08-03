@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
   if (role === "admin") {
     const rows = await sql<{ id: string }[]>`
       insert into members (name, email, role, plan, status)
-      values ('Sahil K.', 'admin@quantedge.demo', 'ADMIN', 'ULTIMATE', 'ACTIVE')
-      on conflict (email) do update set role = 'ADMIN'
+      values ('Samuele Gritti', 'admin@quantedge.demo', 'ADMIN', 'ULTIMATE', 'ACTIVE')
+      on conflict (email) do update set role = 'ADMIN', name = 'Samuele Gritti'
       returning id
     `;
     memberId = rows[0].id;
