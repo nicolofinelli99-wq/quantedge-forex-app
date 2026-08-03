@@ -36,20 +36,20 @@ export function PublishForm() {
   }
 
   const inputClass =
-    "w-full rounded-[10px] border border-edge2 bg-bg2 px-3.5 py-3 text-[14px] text-ink outline-none focus:border-accent";
+    "w-full rounded-[10px] border border-edge2 bg-bg2 px-3.5 py-3 text-[14px] text-ink outline-none transition-colors placeholder:text-faint focus:border-accent hover:border-white/25";
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-3.5 sm:grid-cols-2">
+    <form onSubmit={handleSubmit} className="grid gap-5 sm:grid-cols-2">
       <div className="sm:col-span-2">
-        <label className="mb-1.5 block text-[12.5px] text-faint">Title</label>
+        <label className="mb-2 block text-[12.5px] font-medium text-dim">Title</label>
         <input required className={inputClass} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. EUR/USD — Fading the London Open Spike" />
       </div>
       <div>
-        <label className="mb-1.5 block text-[12.5px] text-faint">Pair / instrument</label>
+        <label className="mb-2 block text-[12.5px] font-medium text-dim">Pair / instrument</label>
         <input className={inputClass} value={instrument} onChange={(e) => setInstrument(e.target.value)} placeholder="e.g. EUR/USD" />
       </div>
       <div>
-        <label className="mb-1.5 block text-[12.5px] text-faint">Type</label>
+        <label className="mb-2 block text-[12.5px] font-medium text-dim">Type</label>
         <select className={inputClass} value={type} onChange={(e) => setType(e.target.value)}>
           {["Intraday", "Swing", "Scalp", "Positional", "Metals"].map((t) => (
             <option key={t}>{t}</option>
@@ -57,7 +57,7 @@ export function PublishForm() {
         </select>
       </div>
       <div>
-        <label className="mb-1.5 block text-[12.5px] text-faint">Bias</label>
+        <label className="mb-2 block text-[12.5px] font-medium text-dim">Bias</label>
         <select className={inputClass} value={bias} onChange={(e) => setBias(e.target.value)}>
           <option>BUY</option>
           <option>SELL</option>
@@ -65,7 +65,7 @@ export function PublishForm() {
         </select>
       </div>
       <div>
-        <label className="mb-1.5 block text-[12.5px] text-faint">Minimum plan required</label>
+        <label className="mb-2 block text-[12.5px] font-medium text-dim">Minimum plan required</label>
         <select className={inputClass} value={minPlan} onChange={(e) => setMinPlan(e.target.value)}>
           <option value="BASIC">Basic (all members)</option>
           <option value="PREMIUM">Premium+</option>
@@ -73,11 +73,11 @@ export function PublishForm() {
         </select>
       </div>
       <div className="sm:col-span-2">
-        <label className="mb-1.5 block text-[12.5px] text-faint">Short excerpt (shown as teaser)</label>
+        <label className="mb-2 block text-[12.5px] font-medium text-dim">Short excerpt (shown as teaser)</label>
         <textarea required className={inputClass + " min-h-[70px] resize-y"} value={excerpt} onChange={(e) => setExcerpt(e.target.value)} placeholder="One or two sentences that hook the reader…" />
       </div>
       <div className="sm:col-span-2">
-        <label className="mb-1.5 block text-[12.5px] text-faint">Full strategy write-up</label>
+        <label className="mb-2 block text-[12.5px] font-medium text-dim">Full strategy write-up</label>
         <textarea required className={inputClass + " min-h-[160px] resize-y"} value={fullBody} onChange={(e) => setFullBody(e.target.value)} placeholder="Write the full analysis: context, reasoning, key levels and risk plan…" />
       </div>
       <div className="sm:col-span-2 flex items-center gap-3">

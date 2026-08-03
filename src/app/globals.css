@@ -40,10 +40,11 @@ h1, h2, h3, h4 {
 }
 
 .glass {
-  background: rgba(16, 24, 40, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(18, 27, 44, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 18px;
   backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 24px 48px -28px rgba(0, 0, 0, 0.65);
 }
 
 ::selection {

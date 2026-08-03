@@ -12,7 +12,7 @@ export function StrategyCard({ strategy, locked }: { strategy: Strategy; locked:
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative mb-3.5 overflow-hidden rounded-[13px] border border-edge bg-white/[0.015] p-4.5">
+    <div className="relative mb-3.5 overflow-hidden rounded-[13px] border border-edge2 bg-white/[0.035] p-4.5">
       <div className={locked ? "pointer-events-none blur-[5px] select-none" : ""}>
         <div className="mb-2 flex items-start justify-between gap-3">
           <div className="font-head text-[15.5px] font-semibold leading-snug">{strategy.title}</div>
