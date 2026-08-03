@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
 import { Card } from "@/components/ui/Card";
-import { PLAN_PRICE, Plan, BillingCycle } from "@/lib/data";
+import { PLAN_PRICE, Plan, BillingCycle } from "@/lib/plans";
 
 function CheckoutInner() {
   const params = useSearchParams();

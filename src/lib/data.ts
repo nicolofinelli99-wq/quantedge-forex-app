@@ -1,11 +1,10 @@
 import { sql } from "@/lib/db";
 import fs from "node:fs";
 import path from "node:path";
+import { Plan, MemberStatus, Role, BillingCycle, PLAN_RANK, PLAN_PRICE } from "@/lib/plans";
 
-export type Plan = "BASIC" | "PREMIUM" | "ULTIMATE";
-export type MemberStatus = "ACTIVE" | "PAST_DUE" | "CANCELLED";
-export type Role = "CLIENT" | "ADMIN";
-export type BillingCycle = "MONTHLY" | "YEARLY";
+export type { Plan, MemberStatus, Role, BillingCycle };
+export { PLAN_RANK, PLAN_PRICE };
 
 export interface Member {
   id: string;
@@ -31,18 +30,6 @@ export interface Strategy {
   author: string;
   published_at: Date;
 }
-
-export const PLAN_RANK: Record<Plan, number> = {
-  BASIC: 0,
-  PREMIUM: 1,
-  ULTIMATE: 2,
-};
-
-export const PLAN_PRICE: Record<Plan, { monthly: number; yearly: number }> = {
-  BASIC: { monthly: 49, yearly: 499 },
-  PREMIUM: { monthly: 99, yearly: 999 },
-  ULTIMATE: { monthly: 199, yearly: 1999 },
-};
 
 let schemaReady: Promise<void> | null = null;
 
