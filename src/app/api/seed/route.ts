@@ -71,6 +71,8 @@ export async function POST(req: NextRequest) {
 
   await ensureSchema();
 
+  await sql`update strategies set author = 'BE4 Trading Desk' where author = 'QuantEdge Desk'`;
+
   const existing = await countStrategies();
   if (existing === 0) {
     for (const s of SAMPLE_STRATEGIES) {
