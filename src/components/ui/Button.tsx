@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import clsx from "clsx";
 
 type Variant = "primary" | "outline" | "ghost" | "danger";
@@ -49,9 +49,10 @@ export function LinkButton({
   size = "md",
   className,
   children,
-}: CommonProps & { href: string }) {
+  ...rest
+}: CommonProps & { href: string } & AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
-    <Link href={href} className={clsx(base, variants[variant], sizes[size], className)}>
+    <Link href={href} className={clsx(base, variants[variant], sizes[size], className)} {...rest}>
       {children}
     </Link>
   );
