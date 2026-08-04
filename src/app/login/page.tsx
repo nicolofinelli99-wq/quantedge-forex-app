@@ -9,7 +9,7 @@ export default function LoginPage() {
       <Card className="relative z-10 w-full max-w-md px-8 py-10 text-center">
         <Link href="/" className="mb-8 inline-flex items-center gap-2.5 font-head text-lg font-bold">
           <img src="/be4-mark.png" alt="" className="h-8 w-auto" />
-          BE4 Trading
+          <img src="/be4-wordmark.png" alt="BE4 Trading" className="h-6 w-auto" />
         </Link>
         <h1 className="mb-2 text-2xl">Sign in to your dashboard</h1>
         <p className="mb-8 text-[13.5px] text-dim">

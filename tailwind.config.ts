@@ -20,6 +20,14 @@ const config: Config = {
         danger: "#ff4d6d",
         warn: "#ffb020",
       },
+      spacing: {
+        "4.5": "1.125rem",
+        "5.5": "1.375rem",
+        "6.5": "1.625rem",
+        "7.5": "1.875rem",
+        "8.5": "2.125rem",
+        "13": "3.25rem",
+      },
       fontFamily: {
         head: ["var(--font-head)"],
         body: ["var(--font-body)"],

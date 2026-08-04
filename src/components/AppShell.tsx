@@ -33,7 +33,7 @@ export function AppShell({
       <div className="fixed inset-x-0 top-0 z-30 flex items-center justify-between border-b border-edge bg-bg2/95 px-4 py-3 backdrop-blur-sm md:hidden">
         <div className="flex items-center gap-2.5 font-head text-base font-bold">
           <img src="/be4-mark.png" alt="" className="h-6.5 w-auto" />
-          BE4 Trading
+          <img src="/be4-wordmark.png" alt="BE4 Trading" className="h-4.5 w-auto" />
         </div>
         <button
           type="button"

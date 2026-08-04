@@ -6,7 +6,7 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-2.5 font-head text-lg font-bold">
               <img src="/be4-mark.png" alt="" className="h-8 w-auto" />
-              BE4 Trading
+              <img src="/be4-wordmark.png" alt="BE4 Trading" className="h-6 w-auto" />
             </div>
             <p className="mt-4 max-w-xs text-[13.5px] leading-relaxed text-faint">
               Strategies built for precision.

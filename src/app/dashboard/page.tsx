@@ -27,7 +27,7 @@ export default async function DashboardPage() {
         <>
           <div className="mb-8 flex items-center gap-2.5 px-1.5 font-head text-lg font-bold">
             <img src="/be4-mark.png" alt="" className="h-8 w-auto" />
-            BE4 Trading
+            <img src="/be4-wordmark.png" alt="BE4 Trading" className="h-5 w-auto" />
           </div>
           <nav className="flex-1">
             <SideLink active label="Overview" icon={<GridIcon />} />

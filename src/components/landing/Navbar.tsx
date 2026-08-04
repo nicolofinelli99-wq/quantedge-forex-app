@@ -7,7 +7,7 @@ export function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2.5 font-head text-lg font-bold">
           <img src="/be4-mark.png" alt="" className="h-8 w-auto" />
-          BE4 Trading
+          <img src="/be4-wordmark.png" alt="BE4 Trading" className="h-6 w-auto" />
         </Link>
         <div className="hidden gap-8 text-[14.5px] font-medium text-dim md:flex">
           <a href="#how" className="hover:text-ink">How it works</a>
