@@ -1,4 +1,4 @@
-# QuantEdge — Forex Strategy Subscription Platform (prototype)
+# BE4 Trading — Forex Strategy Subscription Platform
 
 Full-stack Next.js prototype for a subscription business selling written forex trading
 strategies across three tiers (Basic / Premium / Ultimate). Built to be shown to a real

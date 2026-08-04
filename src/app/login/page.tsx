@@ -8,10 +8,8 @@ export default function LoginPage() {
       <ParticleBackground />
       <Card className="relative z-10 w-full max-w-md px-8 py-10 text-center">
         <Link href="/" className="mb-8 inline-flex items-center gap-2.5 font-head text-lg font-bold">
-          <span className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-gradient-to-br from-accent to-accent3 text-sm font-extrabold text-[#04150f]">
-            Q
-          </span>
-          QuantEdge
+          <img src="/be4-mark.png" alt="" className="h-8 w-auto" />
+          BE4 Trading
         </Link>
         <h1 className="mb-2 text-2xl">Sign in to your dashboard</h1>
         <p className="mb-8 text-[13.5px] text-dim">
@@ -20,7 +18,7 @@ export default function LoginPage() {
 
         <form action="/api/auth/demo-login" method="POST" className="mb-3">
           <input type="hidden" name="role" value="client" />
-          <button className="w-full rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3.5 text-[14.5px] font-semibold text-[#04150f] shadow-[0_10px_30px_-8px_rgba(0,229,160,0.5)] transition-transform hover:-translate-y-0.5">
+          <button className="w-full rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3.5 text-[14.5px] font-semibold text-[#12071f] shadow-[0_10px_30px_-8px_rgba(214,106,238,0.45)] transition-transform hover:-translate-y-0.5">
             Continue as Demo Client (Premium)
           </button>
         </form>

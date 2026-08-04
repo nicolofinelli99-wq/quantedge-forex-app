@@ -32,10 +32,8 @@ export function AppShell({
 
       <div className="fixed inset-x-0 top-0 z-30 flex items-center justify-between border-b border-edge bg-bg2/95 px-4 py-3 backdrop-blur-sm md:hidden">
         <div className="flex items-center gap-2.5 font-head text-base font-bold">
-          <span className="flex h-7.5 w-7.5 items-center justify-center rounded-[8px] bg-gradient-to-br from-accent to-accent3 text-xs font-extrabold text-[#04150f]">
-            Q
-          </span>
-          QuantEdge
+          <img src="/be4-mark.png" alt="" className="h-6.5 w-auto" />
+          BE4 Trading
         </div>
         <button
           type="button"

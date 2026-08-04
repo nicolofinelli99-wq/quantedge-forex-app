@@ -51,7 +51,7 @@ export function ParticleBackground() {
           const dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 120) {
-            ctx.strokeStyle = `rgba(0,229,160,${0.15 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(214,106,238,${0.15 * (1 - dist / 120)})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -62,7 +62,7 @@ export function ParticleBackground() {
       }
       for (const p of particles) {
         ctx.beginPath();
-        ctx.fillStyle = "rgba(0,229,160,.7)";
+        ctx.fillStyle = "rgba(214,106,238,.7)";
         ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
         ctx.fill();
       }

@@ -2,9 +2,22 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "QuantEdge — Forex Strategy Subscriptions",
+  title: "BE4 Trading — Forex Strategy Subscriptions",
   description:
-    "Written forex trading strategies across major and minor currency pairs, delivered to your private dashboard.",
+    "Written swing forex strategies across major and minor currency pairs — full reasoning, key levels and risk plan, backed by manual backtest history and delivered straight to your private dashboard.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  openGraph: {
+    title: "BE4 Trading — Data. Strategy. Edge.",
+    description:
+      "Written swing forex strategies across major and minor currency pairs, delivered straight to your private dashboard.",
+    images: ["/be4-logo.png"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

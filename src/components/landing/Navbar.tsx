@@ -6,10 +6,8 @@ export function Navbar() {
     <nav className="sticky top-0 z-40 border-b border-edge bg-[#060910]/70 py-4 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2.5 font-head text-lg font-bold">
-          <span className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-gradient-to-br from-accent to-accent3 text-sm font-extrabold text-[#04150f]">
-            Q
-          </span>
-          QuantEdge
+          <img src="/be4-mark.png" alt="" className="h-8 w-auto" />
+          BE4 Trading
         </Link>
         <div className="hidden gap-8 text-[14.5px] font-medium text-dim md:flex">
           <a href="#how" className="hover:text-ink">How it works</a>

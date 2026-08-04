@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: "What payment methods are supported?",
-    a: "Credit/debit cards, PayPal and major cryptocurrencies, processed securely through Stripe.",
+    a: "Major credit and debit cards, processed through a secure checkout provider. Additional local payment methods will be added as the desk grows.",
   },
   {
     q: "What happens if a payment fails or I don't renew?",
@@ -19,11 +19,11 @@ const faqs = [
   },
   {
     q: "Can I cancel anytime?",
-    a: "Yes — no lock-in. Cancel from your dashboard and keep access until the end of your current billing cycle.",
+    a: "Yes, subscriptions can be cancelled at any time from your account dashboard. You'll keep access until the end of your current billing cycle.",
   },
   {
     q: "Is this regulated financial advice?",
-    a: "Placeholder — to be finalized with a compliance review. Content should be framed as educational/informational written analysis, not personalized investment advice; forex trading is leveraged, carries a high level of risk, and may not be suitable for all investors.",
+    a: "No. BE4 Trading publishes market analysis and educational trading strategies for informational purposes only. Nothing on this platform constitutes personalized financial advice, and trading forex carries risk of loss. Members are responsible for their own trading decisions.",
   },
 ];
 

@@ -16,9 +16,9 @@ const plans = [
   {
     key: "BASIC" as const,
     name: "Basic",
-    desc: "For traders who want daily direction without the noise.",
+    desc: "For traders who want clear weekly direction without the noise.",
     features: [
-      "Daily market outlook (London & NY sessions)",
+      "Weekly market outlook (London & NY sessions)",
       "2–3 written currency pair strategies / week",
       "Full reasoning, key levels & risk plan on every strategy",
       "Private Telegram community",
@@ -32,7 +32,7 @@ const plans = [
     desc: "Full intraday + metals coverage for active traders.",
     features: [
       "Everything in Basic, plus:",
-      "In-depth intraday strategy write-ups",
+      "In-depth multi-timeframe strategy write-ups",
       "Gold & advanced pair strategy write-ups",
       "Live chart annotations & rationale",
       "Priority WhatsApp support",
@@ -101,7 +101,7 @@ export function Pricing() {
                   className={clsx(
                     "relative flex h-full flex-col px-7 py-9",
                     plan.featured &&
-                      "border-accent/40 bg-gradient-to-b from-accent/[0.06] to-surface shadow-[0_30px_60px_-20px_rgba(0,229,160,0.25)] md:scale-[1.04]"
+                      "border-accent/40 bg-gradient-to-b from-accent/[0.06] to-surface shadow-[0_30px_60px_-20px_rgba(214,106,238,0.25)] md:scale-[1.04]"
                   )}
                 >
                   {plan.featured && (
@@ -131,7 +131,7 @@ export function Pricing() {
                     className={clsx(
                       "inline-flex items-center justify-center rounded-xl px-6 py-3 text-[14.5px] font-semibold transition-all hover:-translate-y-0.5",
                       plan.featured
-                        ? "bg-gradient-to-br from-accent to-accent3 text-[#04150f] shadow-[0_10px_30px_-8px_rgba(0,229,160,0.5)]"
+                        ? "bg-gradient-to-br from-accent to-accent3 text-[#12071f] shadow-[0_10px_30px_-8px_rgba(214,106,238,0.45)]"
                         : "border border-edge2 bg-white/[0.02] text-ink hover:bg-white/[0.06]"
                     )}
                   >

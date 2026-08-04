@@ -9,9 +9,9 @@ const check = (
 const dash = <span className="text-faint">—</span>;
 
 const rows: [string, React.ReactNode, React.ReactNode, React.ReactNode][] = [
-  ["Daily market outlook", check, check, check],
+  ["Weekly market outlook", check, check, check],
   ["Weekly written strategies", "2–3", "5–7", "Unlimited"],
-  ["Intraday strategies", dash, check, check],
+  ["Multi-timeframe strategies", dash, check, check],
   ["Gold & advanced pair strategies", dash, check, check],
   ["Live chart annotations", dash, check, check],
   ["Support channel", "Community", "Priority WhatsApp", "Direct line"],

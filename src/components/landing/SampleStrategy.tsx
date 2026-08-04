@@ -12,7 +12,7 @@ export async function SampleStrategy() {
       <div className="mx-auto max-w-6xl">
         <Reveal className="mx-auto mb-14 max-w-xl text-center">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-3.5 py-1.5 font-mono text-xs uppercase tracking-widest text-accent">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Today&apos;s desk
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" /> This week&apos;s desk
           </div>
           <h2 className="mb-3 text-[clamp(28px,4vw,42px)]">A peek at what members read</h2>
           <p className="text-dim">Full written reasoning, key levels and risk plan — unlocked instantly once you subscribe.</p>
@@ -28,12 +28,12 @@ export async function SampleStrategy() {
                 </>
               ) : (
                 <>
-                  <Badge tone="purple" className="mb-3">Majors · Intraday</Badge>
-                  <div className="mb-2 font-head text-lg font-semibold">EUR/USD — Fading the London Open Spike</div>
+                  <Badge tone="purple" className="mb-3">Majors · Swing</Badge>
+                  <div className="mb-2 font-head text-lg font-semibold">GBP/USD — Weekly Range Break Setup</div>
                   <p className="text-[14px] leading-relaxed text-dim">
-                    Price tends to overextend in the first 30 minutes of the London session before
-                    reverting toward the Asian range. Here&apos;s how we&apos;re positioning around
-                    today&apos;s open, with our confirmation triggers and invalidation level.
+                    Price has compressed against a multi-week resistance band on the daily chart.
+                    Here&apos;s how we&apos;re structuring entries around a confirmed break, with our
+                    key levels, invalidation and risk plan for the week ahead.
                   </p>
                 </>
               )}
@@ -45,7 +45,7 @@ export async function SampleStrategy() {
                   <path d="M8 11V7a4 4 0 0 1 8 0v4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
-              <div className="font-semibold">Unlock today&apos;s full strategy write-up</div>
+              <div className="font-semibold">Unlock this week&apos;s full strategy write-up</div>
               <LinkButton href="#pricing" size="sm">Choose a Plan</LinkButton>
             </div>
           </Card>

@@ -5,7 +5,7 @@ const steps = [
   { n: "01", title: "Choose your plan", body: "Basic, Premium or Ultimate — pick the depth of coverage that fits how you trade." },
   { n: "02", title: "Pay securely", body: "Checkout in seconds. Auto-renews on your billing cycle, cancel anytime." },
   { n: "03", title: "Instant dashboard access", body: "Your private members' area unlocks immediately after checkout." },
-  { n: "04", title: "Read daily strategies", body: "New write-ups appear on your feed the moment the desk publishes them." },
+  { n: "04", title: "Read weekly strategies", body: "New write-ups appear on your feed the moment the desk publishes them, complete with the historical track record behind each setup." },
 ];
 
 export function HowItWorks() {

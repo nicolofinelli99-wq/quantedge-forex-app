@@ -15,10 +15,8 @@ export function AdminSidebar({ adminName }: { adminName: string }) {
   return (
     <>
       <div className="mb-8 flex items-center gap-2.5 px-1.5 font-head text-lg font-bold">
-        <span className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-gradient-to-br from-accent to-accent3 text-sm font-extrabold text-[#04150f]">
-          Q
-        </span>
-        QuantEdge
+        <img src="/be4-mark.png" alt="" className="h-8 w-auto" />
+        BE4 Trading
       </div>
       <div className="mb-2 px-3 text-[10.5px] uppercase tracking-wide text-faint">Manage</div>
       <nav className="flex-1">

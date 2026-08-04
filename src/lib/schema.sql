@@ -22,6 +22,6 @@ create table if not exists strategies (
   excerpt text not null,
   body text not null,
   min_plan text not null default 'BASIC',
-  author text not null default 'QuantEdge Desk',
+  author text not null default 'BE4 Trading Desk',
   published_at timestamptz not null default now()
 );

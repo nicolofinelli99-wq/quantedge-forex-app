@@ -125,7 +125,7 @@ function CheckoutInner() {
           <button
             onClick={handlePay}
             disabled={!canSubmit || stage !== "idle"}
-            className="mt-2 w-full rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3.5 text-[14.5px] font-semibold text-[#04150f] shadow-[0_10px_30px_-8px_rgba(0,229,160,0.5)] transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
+            className="mt-2 w-full rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3.5 text-[14.5px] font-semibold text-[#12071f] shadow-[0_10px_30px_-8px_rgba(214,106,238,0.45)] transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
           >
             Pay ${amount.toLocaleString("en-US")}.00 Securely
           </button>
