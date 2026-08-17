@@ -7,7 +7,7 @@ const notes = [
   },
   {
     title: "Access control",
-    body: "Each strategy is tagged by minimum plan (Basic / Premium / Ultimate). A member's dashboard only renders content at or below their active plan — enforced server-side in the database query, not just visually.",
+    body: "Each strategy is tagged by minimum plan (Research / Strategy / Complete). A member's dashboard only renders content at or below their active plan — enforced server-side in the database query, not just visually.",
   },
   {
     title: "Grace period",

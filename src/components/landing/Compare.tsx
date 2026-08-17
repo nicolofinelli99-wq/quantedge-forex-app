@@ -9,15 +9,14 @@ const check = (
 const dash = <span className="text-faint">—</span>;
 
 const rows: [string, React.ReactNode, React.ReactNode, React.ReactNode][] = [
-  ["Weekly market outlook", check, check, check],
-  ["Weekly written strategies", "2–3", "5–7", "Unlimited"],
-  ["Multi-timeframe strategies", dash, check, check],
-  ["Gold & advanced pair strategies", dash, check, check],
-  ["Live chart annotations", dash, check, check],
-  ["Support channel", "Community", "Priority WhatsApp", "Direct line"],
-  ["Live Q&A sessions", dash, "Monthly", "Monthly"],
-  ["1-on-1 strategy call", dash, dash, check],
-  ["Trading plan review", dash, dash, check],
+  ["Weekly COT Report", check, check, check],
+  ["Monthly macro report", check, check, check],
+  ["Swing analysis & key levels", check, check, check],
+  ["Long-term position updates", check, check, check],
+  ["Ready-to-use strategies", dash, check, check],
+  ["Backtest history", dash, check, check],
+  ["Video & written breakdowns", dash, check, check],
+  ["Support", "Community", "Priority WhatsApp", "Priority WhatsApp"],
 ];
 
 export function Compare() {
@@ -36,9 +35,9 @@ export function Compare() {
               <thead>
                 <tr>
                   <th className="px-4 py-3.5 text-left font-head text-[14px]">Feature</th>
-                  <th className="px-4 py-3.5 font-head text-[14px]">Basic</th>
-                  <th className="px-4 py-3.5 font-head text-[14px]">Premium</th>
-                  <th className="px-4 py-3.5 font-head text-[14px]">Ultimate</th>
+                  <th className="px-4 py-3.5 font-head text-[14px]">Research</th>
+                  <th className="px-4 py-3.5 font-head text-[14px]">Strategy</th>
+                  <th className="px-4 py-3.5 font-head text-[14px]">Complete</th>
                 </tr>
               </thead>
               <tbody>

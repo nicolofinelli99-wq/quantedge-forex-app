@@ -1,14 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { ParticleBackground } from "@/components/ParticleBackground";
-import { Card } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
-
-const stats = [
-  { num: "12,400+", label: "Active subscribers*" },
-  { num: "3", label: "Strategies published weekly*" },
-  { num: "4.8/5", label: "Avg. member rating*" },
-];
 
 export function Hero() {
   return (
@@ -60,30 +53,6 @@ export function Hero() {
             Read a Sample Strategy
           </LinkButton>
         </motion.div>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="mt-4 text-[12.5px] text-faint"
-        >
-          Active subscribers trading with an edge
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 flex flex-wrap justify-center gap-3.5"
-        >
-          {stats.map((s) => (
-            <Card key={s.label} className="min-w-[150px] px-6 py-4 text-left">
-              <div className="font-mono-num text-2xl font-semibold">{s.num}</div>
-              <div className="mt-0.5 text-[12.5px] text-faint">{s.label}</div>
-            </Card>
-          ))}
-        </motion.div>
-        <p className="mt-4 text-[11.5px] text-faint">
-          *Placeholder metrics for demo — replace with real, verifiable figures before launch.
-        </p>
       </div>
     </header>
   );

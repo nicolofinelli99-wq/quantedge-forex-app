@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   if (role === "admin") {
     const rows = await sql<{ id: string }[]>`
       insert into members (name, email, role, plan, status)
-      values ('Samuele Gritti', 'admin@quantedge.demo', 'ADMIN', 'ULTIMATE', 'ACTIVE')
+      values ('Samuele Gritti', 'admin@quantedge.demo', 'ADMIN', 'COMPLETE', 'ACTIVE')
       on conflict (email) do update set role = 'ADMIN', name = 'Samuele Gritti'
       returning id
     `;
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     nextBilling.setDate(nextBilling.getDate() + 30);
     const rows = await sql<{ id: string }[]>`
       insert into members (name, email, role, plan, status, billing_cycle, next_billing_at)
-      values ('Nicolo F.', 'demo.client@quantedge.demo', 'CLIENT', 'PREMIUM', 'ACTIVE', 'MONTHLY', ${nextBilling})
+      values ('Nicolo F.', 'demo.client@quantedge.demo', 'CLIENT', 'STRATEGY', 'ACTIVE', 'MONTHLY', ${nextBilling})
       on conflict (email) do update set status = 'ACTIVE'
       returning id
     `;

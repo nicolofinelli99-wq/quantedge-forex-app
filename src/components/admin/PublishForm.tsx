@@ -10,7 +10,7 @@ export function PublishForm() {
   const [bias, setBias] = useState("BUY");
   const [excerpt, setExcerpt] = useState("");
   const [fullBody, setFullBody] = useState("");
-  const [minPlan, setMinPlan] = useState("BASIC");
+  const [minPlan, setMinPlan] = useState("RESEARCH");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -67,9 +67,9 @@ export function PublishForm() {
       <div>
         <label className="mb-2 block text-[12.5px] font-medium text-dim">Minimum plan required</label>
         <select className={inputClass} value={minPlan} onChange={(e) => setMinPlan(e.target.value)}>
-          <option value="BASIC">Basic (all members)</option>
-          <option value="PREMIUM">Premium+</option>
-          <option value="ULTIMATE">Ultimate only</option>
+          <option value="RESEARCH">Research (all members)</option>
+          <option value="STRATEGY">Strategy+</option>
+          <option value="COMPLETE">Complete only</option>
         </select>
       </div>
       <div className="sm:col-span-2">

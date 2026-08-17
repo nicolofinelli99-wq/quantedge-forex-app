@@ -3,19 +3,19 @@
 // no "postgres" package) so client components can safely import it without
 // pulling Node-only dependencies into the browser bundle.
 
-export type Plan = "BASIC" | "PREMIUM" | "ULTIMATE";
+export type Plan = "RESEARCH" | "STRATEGY" | "COMPLETE";
 export type MemberStatus = "ACTIVE" | "PAST_DUE" | "CANCELLED";
 export type Role = "CLIENT" | "ADMIN";
 export type BillingCycle = "MONTHLY" | "YEARLY";
 
 export const PLAN_RANK: Record<Plan, number> = {
-  BASIC: 0,
-  PREMIUM: 1,
-  ULTIMATE: 2,
+  RESEARCH: 0,
+  STRATEGY: 1,
+  COMPLETE: 2,
 };
 
 export const PLAN_PRICE: Record<Plan, { monthly: number; yearly: number }> = {
-  BASIC: { monthly: 49, yearly: 499 },
-  PREMIUM: { monthly: 99, yearly: 999 },
-  ULTIMATE: { monthly: 199, yearly: 1999 },
+  RESEARCH: { monthly: 20, yearly: 200 },
+  STRATEGY: { monthly: 40, yearly: 400 },
+  COMPLETE: { monthly: 50, yearly: 500 },
 };

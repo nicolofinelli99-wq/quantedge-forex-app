@@ -19,7 +19,7 @@ export default function LoginPage() {
         <form action="/api/auth/demo-login" method="POST" className="mb-3">
           <input type="hidden" name="role" value="client" />
           <button className="w-full rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3.5 text-[14.5px] font-semibold text-[#12071f] shadow-[0_10px_30px_-8px_rgba(214,106,238,0.45)] transition-transform hover:-translate-y-0.5">
-            Continue as Demo Client (Premium)
+            Continue as Demo Client (Strategy)
           </button>
         </form>
         <form action="/api/auth/demo-login" method="POST" className="mb-8">

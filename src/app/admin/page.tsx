@@ -8,10 +8,10 @@ export default async function AdminOverviewPage() {
   const stats = await getAdminStats();
   const strategyCount = await countStrategies();
 
-  const planRows: { key: "BASIC" | "PREMIUM" | "ULTIMATE"; label: string; color: string }[] = [
-    { key: "BASIC", label: "Basic", color: "bg-accent3" },
-    { key: "PREMIUM", label: "Premium", color: "bg-accent" },
-    { key: "ULTIMATE", label: "Ultimate", color: "bg-[#c7bcff]" },
+  const planRows: { key: "RESEARCH" | "STRATEGY" | "COMPLETE"; label: string; color: string }[] = [
+    { key: "RESEARCH", label: "Research", color: "bg-accent3" },
+    { key: "STRATEGY", label: "Strategy", color: "bg-accent" },
+    { key: "COMPLETE", label: "Complete", color: "bg-[#c7bcff]" },
   ];
 
   return (

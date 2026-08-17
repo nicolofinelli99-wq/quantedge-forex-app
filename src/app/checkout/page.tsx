@@ -9,7 +9,7 @@ import { PLAN_PRICE, Plan, BillingCycle } from "@/lib/plans";
 function CheckoutInner() {
   const params = useSearchParams();
   const router = useRouter();
-  const plan = (params.get("plan") as Plan) ?? "PREMIUM";
+  const plan = (params.get("plan") as Plan) ?? "STRATEGY";
   const cycle = (params.get("cycle") as BillingCycle) ?? "MONTHLY";
 
   const [name, setName] = useState("");
@@ -18,7 +18,7 @@ function CheckoutInner() {
   const [stage, setStage] = useState<"idle" | "processing" | "success">("idle");
   const [error, setError] = useState("");
 
-  const price = PLAN_PRICE[plan] ?? PLAN_PRICE.PREMIUM;
+  const price = PLAN_PRICE[plan] ?? PLAN_PRICE.STRATEGY;
   const amount = cycle === "YEARLY" ? price.yearly : price.monthly;
 
   const canSubmit = useMemo(() => name.trim().length > 1 && /\S+@\S+\.\S+/.test(email), [name, email]);

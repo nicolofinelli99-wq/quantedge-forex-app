@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getMemberById, listStrategiesForMember } from "@/lib/data";
+import { PLAN_PRICE } from "@/lib/plans";
 import { getSessionMemberId } from "@/lib/session";
 import { AppShell, SideLink } from "@/components/AppShell";
 import { Card } from "@/components/ui/Card";
@@ -78,7 +79,12 @@ export default async function DashboardPage() {
               value={member.next_billing_at ? new Date(member.next_billing_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}
               label="Next billing date"
             />
-            <StatCard icon={<CoinIcon />} tone="purple" value={`$${member.billing_cycle === "YEARLY" ? "yearly" : "99"}`} label="Billed monthly" />
+            <StatCard
+              icon={<CoinIcon />}
+              tone="purple"
+              value={`$${member.billing_cycle === "YEARLY" ? PLAN_PRICE[member.plan].yearly : PLAN_PRICE[member.plan].monthly}`}
+              label={member.billing_cycle === "YEARLY" ? "Billed yearly" : "Billed monthly"}
+            />
             <StatCard icon={<TrendIcon />} tone="amber" value={String(feed.length)} label="Strategies available" />
           </div>
 
@@ -104,7 +110,7 @@ export default async function DashboardPage() {
               <Card className="p-5.5">
                 <h3 className="mb-4 text-[16px]">Announcements</h3>
                 <Notice>Live Q&amp;A this Friday at 7 PM GMT — link in Telegram.</Notice>
-                <Notice>New Gold (XAU/USD) playbook added to Ultimate resources.</Notice>
+                <Notice>New Gold (XAU/USD) playbook added to Complete resources.</Notice>
                 <Notice last>Lower liquidity expected this week — US markets closed.</Notice>
               </Card>
             </div>

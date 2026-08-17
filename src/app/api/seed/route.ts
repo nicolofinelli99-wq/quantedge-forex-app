@@ -8,7 +8,7 @@ const SAMPLE_STRATEGIES = [
     instrument: "EUR/USD",
     type: "Intraday",
     bias: "SELL",
-    minPlan: "BASIC" as const,
+    minPlan: "RESEARCH" as const,
     excerpt:
       "Price tends to overextend in the first 30 minutes of the London session before reverting toward the Asian range. Here's how we're positioning around today's open, with our confirmation triggers and invalidation level.",
     body: `The Asian session left EUR/USD compressed in a tight 25-pip range between 1.0828 and 1.0853, with volume drying up into the London handover — a classic setup for a liquidity grab at the open.
@@ -22,7 +22,7 @@ If price instead breaks and holds above 1.0865 with volume, we stand aside — t
     instrument: "GBP/JPY",
     type: "Swing",
     bias: "BUY",
-    minPlan: "BASIC" as const,
+    minPlan: "RESEARCH" as const,
     excerpt:
       "The BoE-BoJ policy gap continues to support GBP/JPY on pullbacks. We're mapping out a multi-day swing plan around the recent structure, with staggered entries and a trailing risk plan.",
     body: `GBP/JPY has respected the rising trendline off the June low three times now, each bounce coinciding with a fresh leg higher. With the Bank of Japan still reluctant to tighten meaningfully and the BoE holding a firmer stance, the broader macro backdrop keeps favoring GBP/JPY strength on dips.
@@ -36,7 +36,7 @@ We'll size this smaller than an intraday trade given the multi-day hold — this
     instrument: "XAU/USD",
     type: "Metals",
     bias: "NEUTRAL",
-    minPlan: "ULTIMATE" as const,
+    minPlan: "COMPLETE" as const,
     excerpt:
       "Gold has coiled into a tightening range ahead of Friday's Non-Farm Payrolls print. Rather than guessing the number, here's our plan for both breakout scenarios.",
     body: `XAU/USD has been consolidating between 2,325 and 2,378 for the past week, with volatility compressing noticeably into Friday's NFP release — a setup we like to trade reactively rather than predictively.
@@ -52,7 +52,7 @@ We will not be pre-positioning ahead of the release — this note is your playbo
     instrument: "USD/JPY",
     type: "Positional",
     bias: "SELL",
-    minPlan: "PREMIUM" as const,
+    minPlan: "STRATEGY" as const,
     excerpt:
       "USD/JPY is grinding back toward levels that have triggered verbal and actual intervention before. We're not fighting the trend, but we are sizing down and watching the tape closely.",
     body: `Historically, moves above 160.00 on USD/JPY have drawn increasingly direct language from Japanese officials, and on two prior occasions actual intervention followed within days.
@@ -84,9 +84,9 @@ export async function POST(req: NextRequest) {
   await sql`
     insert into members (name, email, role, plan, status, billing_cycle, next_billing_at)
     values
-      ('Ryan Sanders', 'ryan.s@example.com', 'CLIENT', 'PREMIUM', 'ACTIVE', 'MONTHLY', now() + interval '12 days'),
-      ('Priya Kapoor', 'priya.k@example.com', 'CLIENT', 'ULTIMATE', 'ACTIVE', 'MONTHLY', now() + interval '30 days'),
-      ('Arjun Mehta', 'arjun.m@example.com', 'CLIENT', 'BASIC', 'PAST_DUE', 'MONTHLY', now() - interval '2 days')
+      ('Ryan Sanders', 'ryan.s@example.com', 'CLIENT', 'STRATEGY', 'ACTIVE', 'MONTHLY', now() + interval '12 days'),
+      ('Priya Kapoor', 'priya.k@example.com', 'CLIENT', 'COMPLETE', 'ACTIVE', 'MONTHLY', now() + interval '30 days'),
+      ('Arjun Mehta', 'arjun.m@example.com', 'CLIENT', 'RESEARCH', 'PAST_DUE', 'MONTHLY', now() - interval '2 days')
     on conflict (email) do nothing
   `;
 

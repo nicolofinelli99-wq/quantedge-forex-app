@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     bias,
     excerpt,
     body: fullBody,
-    minPlan: minPlan ?? "BASIC",
+    minPlan: minPlan ?? "RESEARCH",
   });
 
   return NextResponse.json({ ok: true, strategy });

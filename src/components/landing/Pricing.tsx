@@ -14,43 +14,37 @@ const check = (
 
 const plans = [
   {
-    key: "BASIC" as const,
-    name: "Basic",
-    desc: "For traders who want clear weekly direction without the noise.",
+    key: "RESEARCH" as const,
+    name: "Research",
+    desc: "Institutional-grade market intelligence for traders who do their own execution.",
     features: [
-      "Weekly market outlook (London & NY sessions)",
-      "2–3 written currency pair strategies / week",
-      "Full reasoning, key levels & risk plan on every strategy",
+      "Weekly COT Report — institutional speculative positioning across FX, commodities, equities and rates",
+      "Monthly macro market report covering equity markets, fixed income, FX and commodities",
+      "Swing analysis across major and minor currency pairs",
+      "Long-term position updates and key level monitoring",
       "Private Telegram community",
-      "Weekly performance recap",
     ],
     featured: false,
   },
   {
-    key: "PREMIUM" as const,
-    name: "Premium",
-    desc: "Full intraday + metals coverage for active traders.",
+    key: "STRATEGY" as const,
+    name: "Strategy",
+    desc: "Ready-to-use trade setups with full backtest history, built on top of our research.",
     features: [
-      "Everything in Basic, plus:",
-      "In-depth multi-timeframe strategy write-ups",
-      "Gold & advanced pair strategy write-ups",
-      "Live chart annotations & rationale",
+      "Everything in Research, plus:",
+      "Ready-to-use trading strategies, continuously updated",
+      "Manual backtest history for every strategy published",
+      "Video and written breakdown for each setup",
       "Priority WhatsApp support",
-      "Monthly live strategy Q&A",
     ],
     featured: true,
   },
   {
-    key: "ULTIMATE" as const,
-    name: "Ultimate",
-    desc: "Direct access to the desk for serious, high-conviction trading.",
+    key: "COMPLETE" as const,
+    name: "Complete",
+    desc: "Full access to both Research and Strategy at a single price.",
     features: [
-      "Everything in Premium, plus:",
-      "1-on-1 monthly strategy call",
-      "Advanced multi-pair & metals strategies",
-      "Personal trading plan review",
-      "Early access to new strategies",
-      "Direct WhatsApp line to the desk",
+      "Everything in Research and Strategy combined — full access to both plans at a single price",
     ],
     featured: false,
   },
@@ -116,7 +110,7 @@ export function Pricing() {
                     <span className="text-[13.5px] text-faint">/ {yearly ? "year" : "month"}</span>
                   </div>
                   <div className="mb-6 text-xs text-faint">
-                    {yearly ? `Billed $${price.yearly} / year` : " "}
+                    {yearly ? `Billed $${price.yearly} / year` : " "}
                   </div>
                   <ul className="mb-7 flex-1 space-y-1">
                     {plan.features.map((f) => (

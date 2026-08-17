@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function RevenuePage() {
   const stats = await getAdminStats();
-  const plans = ["BASIC", "PREMIUM", "ULTIMATE"] as const;
+  const plans = ["RESEARCH", "STRATEGY", "COMPLETE"] as const;
 
   return (
     <div>

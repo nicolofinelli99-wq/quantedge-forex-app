@@ -141,7 +141,7 @@ export async function listStrategiesForMember(member: Member | null): Promise<{ 
 export async function getPublicSampleStrategy(): Promise<Strategy | null> {
   await ensureSchema();
   const rows = await sql<Strategy[]>`
-    select * from strategies where min_plan = 'BASIC' order by published_at desc limit 1
+    select * from strategies where min_plan = 'RESEARCH' order by published_at desc limit 1
   `;
   return rows[0] ?? null;
 }

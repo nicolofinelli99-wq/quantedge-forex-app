@@ -5,7 +5,7 @@ create table if not exists members (
   name text not null,
   email text not null unique,
   role text not null default 'CLIENT',
-  plan text not null default 'BASIC',
+  plan text not null default 'RESEARCH',
   status text not null default 'ACTIVE',
   billing_cycle text not null default 'MONTHLY',
   next_billing_at timestamptz,
@@ -21,7 +21,7 @@ create table if not exists strategies (
   bias text,
   excerpt text not null,
   body text not null,
-  min_plan text not null default 'BASIC',
+  min_plan text not null default 'RESEARCH',
   author text not null default 'BE4 Trading Desk',
   published_at timestamptz not null default now()
 );
