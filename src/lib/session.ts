@@ -1,7 +1,8 @@
 import { cookies } from "next/headers";
 import crypto from "node:crypto";
+import { SESSION_COOKIE } from "@/lib/session-constants";
 
-export const SESSION_COOKIE = "qe_session";
+export { SESSION_COOKIE };
 
 function getSecret(): string {
   const secret = process.env.SESSION_SECRET;
