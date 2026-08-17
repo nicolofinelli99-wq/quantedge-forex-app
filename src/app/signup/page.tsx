@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
@@ -24,8 +24,18 @@ function SignupInner() {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [prices, setPrices] = useState<Record<Plan, { monthly: number; yearly: number }>>(PLAN_PRICE);
 
-  const price = plan ? PLAN_PRICE[plan] : null;
+  useEffect(() => {
+    fetch("/api/plan-prices")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.prices) setPrices(data.prices);
+      })
+      .catch(() => {});
+  }, []);
+
+  const price = plan ? prices[plan] : null;
   const amount = price ? (cycle === "YEARLY" ? price.yearly : price.monthly) : null;
 
   async function handleSubmit(e: React.FormEvent) {

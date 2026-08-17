@@ -1,4 +1,4 @@
-import { getAdminStats, PLAN_PRICE } from "@/lib/data";
+import { getAdminStats, getPlanPrices } from "@/lib/data";
 import { Card } from "@/components/ui/Card";
 import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
 
@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function RevenuePage() {
   const stats = await getAdminStats();
+  const prices = await getPlanPrices();
   const plans = ["RESEARCH", "STRATEGY", "COMPLETE"] as const;
 
   return (
@@ -32,7 +33,7 @@ export default async function RevenuePage() {
           <tbody>
             {plans.map((p) => {
               const count = stats.byPlan[p] ?? 0;
-              const price = PLAN_PRICE[p].monthly;
+              const price = prices[p].monthly;
               return (
                 <tr key={p} className="border-b border-edge last:border-none">
                   <td className="py-3 pr-3">{p.charAt(0) + p.slice(1).toLowerCase()}</td>

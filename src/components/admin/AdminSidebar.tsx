@@ -6,6 +6,7 @@ const nav = [
   { href: "/admin", label: "Overview", icon: <GridIcon /> },
   { href: "/admin/publish", label: "Publish Strategy", icon: <PenIcon /> },
   { href: "/admin/subscribers", label: "Subscribers", icon: <UsersIcon /> },
+  { href: "/admin/pricing", label: "Pricing", icon: <TagIcon /> },
   { href: "/admin/revenue", label: "Revenue", icon: <CoinIcon /> },
   { href: "/admin/settings", label: "Settings", icon: <GearIcon /> },
 ];
@@ -21,7 +22,13 @@ export function AdminSidebar({ adminName }: { adminName: string }) {
       <div className="mb-2 px-3 text-[10.5px] uppercase tracking-wide text-faint">Manage</div>
       <nav className="flex-1">
         {nav.map((item) => (
-          <SideLink key={item.href} href={item.href} label={item.label} icon={item.icon} active={pathname === item.href} />
+          <SideLink
+            key={item.href}
+            href={item.href}
+            label={item.label}
+            icon={item.icon}
+            active={item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href)}
+          />
         ))}
       </nav>
       <div className="mt-4 border-t border-edge pt-4">
@@ -79,6 +86,14 @@ function GearIcon() {
     <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" fill="none" stroke="currentColor" strokeWidth={2}>
       <circle cx="12" cy="12" r="3" />
       <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" />
+    </svg>
+  );
+}
+function TagIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" fill="none" stroke="currentColor" strokeWidth={2}>
+      <path d="M20.6 12.6 12.4 20.8a2 2 0 0 1-2.8 0L3.2 14.4a2 2 0 0 1 0-2.8L11.4 3.4a2 2 0 0 1 1.4-.6H19a2 2 0 0 1 2 2v6.4a2 2 0 0 1-.6 1.4Z" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="15.5" cy="7.5" r="1.5" />
     </svg>
   );
 }

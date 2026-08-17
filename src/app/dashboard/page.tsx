@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { getMemberById, listStrategiesForMember } from "@/lib/data";
-import { PLAN_PRICE, STATUS_LABEL, MemberStatus } from "@/lib/plans";
+import { getMemberById, listStrategiesForMember, getPlanPrices } from "@/lib/data";
+import { STATUS_LABEL, MemberStatus } from "@/lib/plans";
 import { getSessionMemberId } from "@/lib/session";
 import { AppShell, SideLink } from "@/components/AppShell";
 import { Card } from "@/components/ui/Card";
@@ -31,6 +31,7 @@ export default async function DashboardPage({
   if (member.role === "ADMIN") redirect("/admin");
 
   const feed = await listStrategiesForMember(member);
+  const prices = await getPlanPrices();
   const locked = member.status !== "ACTIVE";
   const planLabel = member.plan.charAt(0) + member.plan.slice(1).toLowerCase();
   const demoMode = process.env.DEMO_MODE === "true";
@@ -102,7 +103,7 @@ export default async function DashboardPage({
             <StatCard
               icon={<CoinIcon />}
               tone="purple"
-              value={`$${member.billing_cycle === "YEARLY" ? PLAN_PRICE[member.plan].yearly : PLAN_PRICE[member.plan].monthly}`}
+              value={`$${member.billing_cycle === "YEARLY" ? prices[member.plan].yearly : prices[member.plan].monthly}`}
               label={member.billing_cycle === "YEARLY" ? "Billed yearly" : "Billed monthly"}
             />
             <StatCard icon={<TrendIcon />} tone="amber" value={String(feed.length)} label="Strategies available" />

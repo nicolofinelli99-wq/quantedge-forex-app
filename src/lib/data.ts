@@ -227,8 +227,9 @@ export async function getAdminStats() {
   const [{ past_due }] = await sql<{ past_due: string }[]>`
     select count(*)::text as past_due from members where role = 'CLIENT' and status = 'PAST_DUE'
   `;
+  const prices = await getPlanPrices();
   const mrr = byPlan.reduce((sum, row) => {
-    const price = PLAN_PRICE[row.plan]?.monthly ?? 0;
+    const price = prices[row.plan]?.monthly ?? 0;
     return sum + price * Number(row.count);
   }, 0);
   return {
@@ -237,6 +238,80 @@ export async function getAdminStats() {
     pastDue: Number(past_due),
     mrr,
   };
+}
+
+// ---- Editable plan pricing (DB-backed, falls back to the code defaults above) ----
+
+export async function getPlanPrices(): Promise<Record<Plan, { monthly: number; yearly: number }>> {
+  await ensureSchema();
+  const rows = await sql<{ plan: Plan; monthly: number; yearly: number }[]>`
+    select plan, monthly, yearly from plan_prices
+  `;
+  const result: Record<Plan, { monthly: number; yearly: number }> = { ...PLAN_PRICE };
+  for (const r of rows) {
+    result[r.plan] = { monthly: r.monthly, yearly: r.yearly };
+  }
+  return result;
+}
+
+export async function updatePlanPrice(plan: Plan, monthly: number, yearly: number): Promise<void> {
+  await ensureSchema();
+  await sql`
+    insert into plan_prices (plan, monthly, yearly, updated_at)
+    values (${plan}, ${monthly}, ${yearly}, now())
+    on conflict (plan) do update set monthly = excluded.monthly, yearly = excluded.yearly, updated_at = now()
+  `;
+}
+
+// ---- Admin member management ----
+
+export async function adminUpdateMember(
+  id: string,
+  input: { plan?: Plan; status?: MemberStatus }
+): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`
+    update members set
+      plan = coalesce(${input.plan ?? null}, plan),
+      status = coalesce(${input.status ?? null}, status),
+      updated_at = now()
+    where id = ${id} and role = 'CLIENT'
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function deleteMember(id: string): Promise<void> {
+  await ensureSchema();
+  await sql`delete from members where id = ${id} and role = 'CLIENT'`;
+}
+
+/** Admin manually activates/creates a subscriber — e.g. a client who paid by bank
+ *  transfer before a payment processor was connected. Upserts by email; if the
+ *  member already exists (e.g. signed up but never paid), this just activates them. */
+export async function createManualMember(input: {
+  name: string;
+  email: string;
+  plan: Plan;
+  billingCycle: BillingCycle;
+  status?: MemberStatus;
+}): Promise<Member> {
+  await ensureSchema();
+  const status = input.status ?? "ACTIVE";
+  const nextBilling = new Date();
+  nextBilling.setDate(nextBilling.getDate() + (input.billingCycle === "YEARLY" ? 365 : 30));
+  const rows = await sql<Member[]>`
+    insert into members (name, email, role, plan, status, billing_cycle, next_billing_at)
+    values (${input.name}, ${input.email}, 'CLIENT', ${input.plan}, ${status}, ${input.billingCycle}, ${status === "ACTIVE" ? nextBilling : null})
+    on conflict (email) do update set
+      plan = excluded.plan,
+      status = excluded.status,
+      billing_cycle = excluded.billing_cycle,
+      next_billing_at = excluded.next_billing_at,
+      updated_at = now()
+    returning *
+  `;
+  return rows[0];
 }
 
 export async function listStrategiesForAdmin(): Promise<Strategy[]> {
@@ -286,4 +361,44 @@ export async function countStrategies(): Promise<number> {
   await ensureSchema();
   const [{ count }] = await sql<{ count: string }[]>`select count(*)::text as count from strategies`;
   return Number(count);
+}
+
+
+export async function getStrategyById(id: string): Promise<Strategy | null> {
+  await ensureSchema();
+  const rows = await sql<Strategy[]>`select * from strategies where id = ${id} limit 1`;
+  return rows[0] ?? null;
+}
+
+export async function updateStrategy(
+  id: string,
+  input: {
+    title: string;
+    instrument?: string;
+    type: string;
+    bias?: string;
+    excerpt: string;
+    body: string;
+    minPlan: Plan;
+  }
+): Promise<Strategy | null> {
+  await ensureSchema();
+  const rows = await sql<Strategy[]>`
+    update strategies set
+      title = ${input.title},
+      instrument = ${input.instrument ?? null},
+      type = ${input.type},
+      bias = ${input.bias ?? null},
+      excerpt = ${input.excerpt},
+      body = ${input.body},
+      min_plan = ${input.minPlan}
+    where id = ${id}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function deleteStrategy(id: string): Promise<void> {
+  await ensureSchema();
+  await sql`delete from strategies where id = ${id}`;
 }

@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { listStrategiesForAdmin } from "@/lib/data";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { PublishForm } from "@/components/admin/PublishForm";
+import { DeleteStrategyButton } from "@/components/admin/DeleteStrategyButton";
 
 export const dynamic = "force-dynamic";
 
@@ -28,10 +30,22 @@ export default async function PublishPage() {
                   <div className="text-[13.5px] font-semibold leading-snug">{s.title}</div>
                   <Badge tone="purple">{s.type}</Badge>
                 </div>
-                <p className="mb-1.5 line-clamp-2 text-[12.5px] text-dim">{s.excerpt}</p>
-                <div className="flex justify-between text-[11px] text-faint">
-                  <span>{new Date(s.published_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
-                  <span>Min plan: {s.min_plan}</span>
+                <p className="mb-2.5 line-clamp-2 text-[12.5px] text-dim">{s.excerpt}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-[11px] text-faint">
+                    <span>{new Date(s.published_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+                    {" · "}
+                    <span>Min plan: {s.min_plan}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Link
+                      href={`/admin/publish/${s.id}`}
+                      className="rounded-lg border border-edge2 bg-white/[0.02] px-2.5 py-1.5 text-[11.5px] font-semibold text-ink hover:bg-white/[0.06]"
+                    >
+                      Edit
+                    </Link>
+                    <DeleteStrategyButton id={s.id} />
+                  </div>
                 </div>
               </div>
             ))}

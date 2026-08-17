@@ -43,3 +43,15 @@ create table if not exists password_reset_tokens (
   created_at timestamptz not null default now()
 );
 create index if not exists password_reset_tokens_member_id_idx on password_reset_tokens (member_id);
+
+create table if not exists plan_prices (
+  plan text primary key,
+  monthly integer not null,
+  yearly integer not null,
+  updated_at timestamptz not null default now()
+);
+insert into plan_prices (plan, monthly, yearly) values
+  ('RESEARCH', 20, 200),
+  ('STRATEGY', 40, 400),
+  ('COMPLETE', 50, 500)
+on conflict (plan) do nothing;

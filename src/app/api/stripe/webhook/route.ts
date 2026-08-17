@@ -7,7 +7,7 @@ import {
   markMemberPastDueByCustomerId,
   syncMemberPlanBySubscriptionId,
 } from "@/lib/data";
-import { PLAN_PRICE, Plan } from "@/lib/plans";
+import { Plan } from "@/lib/plans";
 import { getStripe, isWebhookConfigured, planFromPriceId } from "@/lib/stripe";
 import {
   sendEmail,
@@ -102,7 +102,9 @@ export async function POST(req: NextRequest) {
           if (customerId) {
             const member = await markMemberActiveRenewal(customerId);
             if (member) {
-              const amount = PLAN_PRICE[member.plan][member.billing_cycle === "YEARLY" ? "yearly" : "monthly"];
+              // Use the amount Stripe actually charged rather than our internal price
+              // table, so the receipt is always accurate even if pricing was edited since.
+              const amount = invoice.amount_paid / 100;
               await sendEmail({
                 to: member.email,
                 subject: "Payment received — thank you",

@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
-import { getMemberById } from "@/lib/data";
+import { getMemberById, getPlanPrices } from "@/lib/data";
 import { getSessionMemberId } from "@/lib/session";
-import { PLAN_PRICE, Plan, BillingCycle } from "@/lib/plans";
+import { Plan, BillingCycle } from "@/lib/plans";
 import { ContinueToPayment } from "@/components/checkout/ContinueToPayment";
 
 function planLabel(plan: string): string {
@@ -25,7 +25,8 @@ export default async function CheckoutPage({
     redirect(`/signup?plan=${plan}&cycle=${cycle}`);
   }
 
-  const price = PLAN_PRICE[plan];
+  const prices = await getPlanPrices();
+  const price = prices[plan];
   const amount = cycle === "YEARLY" ? price.yearly : price.monthly;
 
   return (

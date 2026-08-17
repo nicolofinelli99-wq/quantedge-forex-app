@@ -1,12 +1,18 @@
-import { getAdminStats, countStrategies } from "@/lib/data";
+import Link from "next/link";
+import { getAdminStats, countStrategies, listMembers } from "@/lib/data";
+import { STATUS_LABEL } from "@/lib/plans";
 import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
 
 export const dynamic = "force-dynamic";
 
+const statusTone = { ACTIVE: "green", PAST_DUE: "red", CANCELLED: "grey", INACTIVE: "amber" } as const;
+
 export default async function AdminOverviewPage() {
   const stats = await getAdminStats();
   const strategyCount = await countStrategies();
+  const recentMembers = (await listMembers()).slice(0, 5);
 
   const planRows: { key: "RESEARCH" | "STRATEGY" | "COMPLETE"; label: string; color: string }[] = [
     { key: "RESEARCH", label: "Research", color: "bg-accent3" },
@@ -28,7 +34,7 @@ export default async function AdminOverviewPage() {
         <Stat label="Published strategies" value={String(strategyCount)} />
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[1.6fr_1fr]">
+      <div className="mb-5 grid gap-5 lg:grid-cols-[1.6fr_1fr]">
         <Card className="p-5.5">
           <h3 className="mb-4 text-[16px]">Illustrative growth curve</h3>
           <PerformanceChart />
@@ -45,6 +51,23 @@ export default async function AdminOverviewPage() {
           ))}
         </Card>
       </div>
+
+      <Card className="p-5.5">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-[16px]">Recent subscribers</h3>
+          <Link href="/admin/subscribers" className="text-[12.5px] text-accent3 hover:underline">View all →</Link>
+        </div>
+        {recentMembers.length === 0 && <p className="text-[13.5px] text-dim">No subscribers yet.</p>}
+        {recentMembers.map((m) => (
+          <div key={m.id} className="flex items-center justify-between gap-3 border-b border-edge py-2.5 text-[13px] last:border-none">
+            <div>
+              <div className="font-semibold">{m.name}</div>
+              <div className="text-[12px] text-faint">{m.email}</div>
+            </div>
+            <Badge tone={statusTone[m.status]}>{STATUS_LABEL[m.status]}</Badge>
+          </div>
+        ))}
+      </Card>
     </div>
   );
 }

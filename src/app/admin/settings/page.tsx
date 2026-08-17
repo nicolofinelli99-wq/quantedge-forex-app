@@ -2,8 +2,12 @@ import { Card } from "@/components/ui/Card";
 
 const notes = [
   {
+    title: "Pricing",
+    body: "Editable from the Pricing tab — no code changes or redeploys needed. Update it there, not here.",
+  },
+  {
     title: "Payment gateway",
-    body: "Stripe (placeholder — connect your real account). Subscriptions API handles recurring billing; webhooks auto-suspend or restore dashboard access on payment success/failure.",
+    body: "Not connected yet. The site is built to plug into Stripe out of the box; if a different processor is used instead (Paddle, PayPal, a local gateway), only the checkout/webhook integration needs to be swapped — everything else (accounts, emails, access control) stays the same.",
   },
   {
     title: "Access control",
@@ -11,7 +15,7 @@ const notes = [
   },
   {
     title: "Grace period",
-    body: "Placeholder rule — e.g. a 24-hour grace window with retry attempts before full revocation, to reduce accidental lockouts from a single failed card charge.",
+    body: "Not yet implemented — a failed payment currently suspends access immediately via webhook. A grace window (e.g. 24h with retries) can be added once a processor is connected, if wanted.",
   },
   {
     title: "Database",

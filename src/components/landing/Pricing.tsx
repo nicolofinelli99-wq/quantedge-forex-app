@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import { Card } from "@/components/ui/Card";
 import { Reveal } from "@/components/ui/Reveal";
-import { PLAN_PRICE } from "@/lib/plans";
+import { PLAN_PRICE, Plan } from "@/lib/plans";
 
 const check = (
   <svg viewBox="0 0 24 24" className="mt-0.5 h-[18px] w-[18px] flex-shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -52,6 +52,18 @@ const plans = [
 
 export function Pricing() {
   const [yearly, setYearly] = useState(false);
+  const [prices, setPrices] = useState<Record<Plan, { monthly: number; yearly: number }>>(PLAN_PRICE);
+
+  useEffect(() => {
+    fetch("/api/plan-prices")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.prices) setPrices(data.prices);
+      })
+      .catch(() => {
+        // Fall back to the bundled defaults — the page still works fine offline/on error.
+      });
+  }, []);
 
   return (
     <section id="pricing" className="px-6 py-24">
@@ -87,7 +99,7 @@ export function Pricing() {
 
         <div className="grid gap-5 md:grid-cols-3">
           {plans.map((plan, i) => {
-            const price = PLAN_PRICE[plan.key];
+            const price = prices[plan.key];
             const amount = yearly ? price.yearly : price.monthly;
             return (
               <Reveal key={plan.key} delay={i * 0.08}>
