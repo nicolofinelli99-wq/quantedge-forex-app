@@ -73,6 +73,26 @@ export async function POST(req: NextRequest) {
 
   await sql`update strategies set author = 'BE4 Trading Desk' where author = 'QuantEdge Desk'`;
 
+  // One-off migration: old plan names -> new pricing plan names (client pricing update, Aug 2026)
+  await sql`
+    update members set plan = case plan
+      when 'BASIC' then 'RESEARCH'
+      when 'PREMIUM' then 'STRATEGY'
+      when 'ULTIMATE' then 'COMPLETE'
+      else plan
+    end
+    where plan in ('BASIC', 'PREMIUM', 'ULTIMATE')
+  `;
+  await sql`
+    update strategies set min_plan = case min_plan
+      when 'BASIC' then 'RESEARCH'
+      when 'PREMIUM' then 'STRATEGY'
+      when 'ULTIMATE' then 'COMPLETE'
+      else min_plan
+    end
+    where min_plan in ('BASIC', 'PREMIUM', 'ULTIMATE')
+  `;
+
   const existing = await countStrategies();
   if (existing === 0) {
     for (const s of SAMPLE_STRATEGIES) {
