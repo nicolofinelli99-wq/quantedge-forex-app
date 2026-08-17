@@ -1,17 +1,29 @@
 import { redirect } from "next/navigation";
 import { getMemberById, listStrategiesForMember } from "@/lib/data";
-import { PLAN_PRICE } from "@/lib/plans";
+import { PLAN_PRICE, STATUS_LABEL, MemberStatus } from "@/lib/plans";
 import { getSessionMemberId } from "@/lib/session";
 import { AppShell, SideLink } from "@/components/AppShell";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { StrategyCard } from "@/components/dashboard/StrategyCard";
 import { SelfStatusToggle } from "@/components/dashboard/SelfStatusToggle";
+import { ManageBillingButton } from "@/components/dashboard/ManageBillingButton";
 import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardPage() {
+const BADGE_TONE: Record<MemberStatus, "green" | "red" | "grey" | "amber"> = {
+  ACTIVE: "green",
+  PAST_DUE: "red",
+  CANCELLED: "grey",
+  INACTIVE: "amber",
+};
+
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: { checkout?: string };
+}) {
   const id = getSessionMemberId();
   const member = await getMemberById(id);
 
@@ -21,6 +33,8 @@ export default async function DashboardPage() {
   const feed = await listStrategiesForMember(member);
   const locked = member.status !== "ACTIVE";
   const planLabel = member.plan.charAt(0) + member.plan.slice(1).toLowerCase();
+  const demoMode = process.env.DEMO_MODE === "true";
+  const justCheckedOut = searchParams.checkout === "success";
 
   return (
     <AppShell
@@ -49,7 +63,8 @@ export default async function DashboardPage() {
                 </div>
               </div>
             </div>
-            <SelfStatusToggle initialActive={member.status === "ACTIVE"} />
+            {member.stripe_customer_id && <ManageBillingButton className="mb-3 w-full rounded-[10px] border border-edge2 bg-white/[0.02] px-3.5 py-2.5 text-[12.5px] font-semibold text-ink hover:bg-white/[0.06]" />}
+            {demoMode && <SelfStatusToggle initialActive={member.status === "ACTIVE"} />}
             <form action="/api/auth/logout" method="POST" className="mt-3">
               <button className="w-full rounded-[10px] px-3 py-2 text-left text-[12.5px] text-faint hover:text-ink">
                 Sign out
@@ -64,10 +79,15 @@ export default async function DashboardPage() {
           <h1 className="text-[23px]">Welcome back, {member.name.split(" ")[0]}</h1>
           <div className="mt-0.5 text-[13.5px] text-faint">Here&apos;s what the desk published today.</div>
         </div>
-        <Badge tone={locked ? "red" : "green"}>
-          ● {locked ? "Payment Failed" : "Subscription Active"}
-        </Badge>
+        <Badge tone={BADGE_TONE[member.status]}>● {STATUS_LABEL[member.status]}</Badge>
       </div>
+
+      {justCheckedOut && (
+        <div className="mb-6 rounded-[12px] border border-accent/30 bg-accent/10 px-4 py-3 text-[13.5px] text-ink">
+          Payment received — your subscription is being activated. This page will reflect it within a few
+          seconds; refresh if it still shows as inactive.
+        </div>
+      )}
 
       <div className="relative">
         <div className={locked ? "pointer-events-none blur-[4px] select-none" : ""}>
@@ -126,23 +146,40 @@ export default async function DashboardPage() {
                   <path d="M8 11V7a4 4 0 0 1 8 0v4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
-              <h4 className="mb-2 text-[17px]">Access suspended</h4>
-              <p className="mb-5 text-[13.5px] leading-relaxed text-dim">
-                Your last payment didn&apos;t go through. Renew now to keep reading daily strategies —
-                your history and settings are safe.
-              </p>
-              <a
-                href="/#pricing"
-                className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3 text-[14.5px] font-semibold text-[#04150f]"
-              >
-                Update Payment Method
-              </a>
+              <h4 className="mb-2 text-[17px]">{lockedHeading(member.status)}</h4>
+              <p className="mb-5 text-[13.5px] leading-relaxed text-dim">{lockedBody(member.status)}</p>
+              {member.status === "PAST_DUE" && member.stripe_customer_id ? (
+                <ManageBillingButton className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3 text-[14.5px] font-semibold text-[#04150f]" />
+              ) : (
+                <a
+                  href="/#pricing"
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3 text-[14.5px] font-semibold text-[#04150f]"
+                >
+                  Choose a Plan
+                </a>
+              )}
             </Card>
           </div>
         )}
       </div>
     </AppShell>
   );
+}
+
+function lockedHeading(status: string): string {
+  if (status === "PAST_DUE") return "Access suspended";
+  if (status === "CANCELLED") return "Subscription cancelled";
+  return "No active plan yet";
+}
+
+function lockedBody(status: string): string {
+  if (status === "PAST_DUE") {
+    return "Your last payment didn't go through. Update your payment method to keep reading daily strategies — your history and settings are safe.";
+  }
+  if (status === "CANCELLED") {
+    return "Your subscription has ended. Choose a plan again any time to pick up right where you left off.";
+  }
+  return "Your account is ready — choose a plan to unlock the strategy feed and your dashboard.";
 }
 
 function StatCard({ icon, tone, value, label }: { icon: React.ReactNode; tone: "green" | "blue" | "purple" | "amber"; value: string; label: string }) {

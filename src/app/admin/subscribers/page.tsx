@@ -1,12 +1,12 @@
 import { listMembers } from "@/lib/data";
+import { STATUS_LABEL } from "@/lib/plans";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { RevokeButton } from "@/components/admin/RevokeButton";
 
 export const dynamic = "force-dynamic";
 
-const statusTone = { ACTIVE: "green", PAST_DUE: "red", CANCELLED: "grey" } as const;
-const statusLabel = { ACTIVE: "Active", PAST_DUE: "Payment failed", CANCELLED: "Cancelled" } as const;
+const statusTone = { ACTIVE: "green", PAST_DUE: "red", CANCELLED: "grey", INACTIVE: "amber" } as const;
 
 export default async function SubscribersPage() {
   const members = await listMembers();
@@ -44,7 +44,7 @@ export default async function SubscribersPage() {
                 </td>
                 <td className="py-3.5 pr-3">{m.plan.charAt(0) + m.plan.slice(1).toLowerCase()}</td>
                 <td className="py-3.5 pr-3">
-                  <Badge tone={statusTone[m.status]}>{statusLabel[m.status]}</Badge>
+                  <Badge tone={statusTone[m.status]}>{STATUS_LABEL[m.status]}</Badge>
                 </td>
                 <td className="py-3.5 pr-3 font-mono-num text-[12.5px]">
                   {m.status === "CANCELLED"

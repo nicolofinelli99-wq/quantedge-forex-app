@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { ensureSchema } from "@/lib/data";
-import { SESSION_COOKIE } from "@/lib/session";
+import { SESSION_COOKIE, sessionCookieValue, SESSION_COOKIE_OPTIONS } from "@/lib/session";
 
+// Demo-only one-click logins for showing the product before real payments are
+// connected. Set DEMO_MODE=false (or remove the env var) in Vercel before
+// launch to disable this endpoint entirely.
 export async function POST(req: NextRequest) {
+  if (process.env.DEMO_MODE !== "true") {
+    return NextResponse.json({ error: "Demo login is disabled." }, { status: 404 });
+  }
+
   const form = await req.formData();
   const role = form.get("role");
   await ensureSchema();
@@ -32,11 +39,6 @@ export async function POST(req: NextRequest) {
 
   const dest = role === "admin" ? "/admin" : "/dashboard";
   const res = NextResponse.redirect(new URL(dest, req.url));
-  res.cookies.set(SESSION_COOKIE, memberId, {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30,
-  });
+  res.cookies.set(SESSION_COOKIE, sessionCookieValue(memberId), SESSION_COOKIE_OPTIONS);
   return res;
 }

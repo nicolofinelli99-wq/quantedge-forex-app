@@ -29,7 +29,7 @@ export function RevokeButton({ id, status }: { id: string; status: MemberStatus 
       </button>
     );
   }
-  if (status === "CANCELLED") {
+  if (status === "CANCELLED" || status === "INACTIVE") {
     return <span className="text-[12px] text-faint">—</span>;
   }
   return (

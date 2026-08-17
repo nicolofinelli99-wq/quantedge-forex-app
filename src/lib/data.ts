@@ -2,6 +2,7 @@ import { sql } from "@/lib/db";
 import fs from "node:fs";
 import path from "node:path";
 import { Plan, MemberStatus, Role, BillingCycle, PLAN_RANK, PLAN_PRICE } from "@/lib/plans";
+import { hashToken } from "@/lib/auth";
 
 export type { Plan, MemberStatus, Role, BillingCycle };
 export { PLAN_RANK, PLAN_PRICE };
@@ -16,6 +17,9 @@ export interface Member {
   billing_cycle: BillingCycle;
   next_billing_at: Date | null;
   created_at: Date;
+  password_hash: string | null;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
 }
 
 export interface Strategy {
@@ -59,32 +63,146 @@ export async function getMemberById(id: string | undefined): Promise<Member | nu
 
 export async function getMemberByEmail(email: string): Promise<Member | null> {
   await ensureSchema();
-  const rows = await sql<Member[]>`select * from members where email = ${email} limit 1`;
+  const rows = await sql<Member[]>`select * from members where lower(email) = lower(${email}) limit 1`;
   return rows[0] ?? null;
 }
 
-export async function createOrUpdateMemberFromCheckout(input: {
+export async function getMemberByStripeCustomerId(customerId: string): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`select * from members where stripe_customer_id = ${customerId} limit 1`;
+  return rows[0] ?? null;
+}
+
+export async function getMemberByStripeSubscriptionId(subscriptionId: string): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`select * from members where stripe_subscription_id = ${subscriptionId} limit 1`;
+  return rows[0] ?? null;
+}
+
+/** Registration: create a brand-new member with a password, no active plan yet
+ *  (status INACTIVE until they complete a Stripe checkout). */
+export async function createMemberWithPassword(input: {
   name: string;
   email: string;
+  passwordHash: string;
+}): Promise<Member> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`
+    insert into members (name, email, role, plan, status, billing_cycle, password_hash)
+    values (${input.name}, ${input.email}, 'CLIENT', 'RESEARCH', 'INACTIVE', 'MONTHLY', ${input.passwordHash})
+    returning *
+  `;
+  return rows[0];
+}
+
+export async function setMemberPassword(memberId: string, passwordHash: string): Promise<void> {
+  await ensureSchema();
+  await sql`update members set password_hash = ${passwordHash}, updated_at = now() where id = ${memberId}`;
+}
+
+/** Called from the Stripe webhook once a checkout session completes successfully. */
+export async function activateMemberFromCheckout(input: {
+  memberId: string;
   plan: Plan;
   billingCycle: BillingCycle;
-}): Promise<Member> {
+  stripeCustomerId: string;
+  stripeSubscriptionId: string;
+}): Promise<Member | null> {
   await ensureSchema();
   const nextBilling = new Date();
   nextBilling.setDate(nextBilling.getDate() + (input.billingCycle === "YEARLY" ? 365 : 30));
   const rows = await sql<Member[]>`
-    insert into members (name, email, role, plan, status, billing_cycle, next_billing_at)
-    values (${input.name}, ${input.email}, 'CLIENT', ${input.plan}, 'ACTIVE', ${input.billingCycle}, ${nextBilling})
-    on conflict (email) do update set
-      name = excluded.name,
-      plan = excluded.plan,
+    update members set
+      plan = ${input.plan},
+      billing_cycle = ${input.billingCycle},
       status = 'ACTIVE',
-      billing_cycle = excluded.billing_cycle,
-      next_billing_at = excluded.next_billing_at,
+      stripe_customer_id = ${input.stripeCustomerId},
+      stripe_subscription_id = ${input.stripeSubscriptionId},
+      next_billing_at = ${nextBilling},
       updated_at = now()
+    where id = ${input.memberId}
     returning *
   `;
-  return rows[0];
+  return rows[0] ?? null;
+}
+
+export async function setMemberStripeCustomerId(memberId: string, stripeCustomerId: string): Promise<void> {
+  await ensureSchema();
+  await sql`update members set stripe_customer_id = ${stripeCustomerId}, updated_at = now() where id = ${memberId}`;
+}
+
+export async function markMemberActiveRenewal(stripeCustomerId: string): Promise<Member | null> {
+  await ensureSchema();
+  const nextBilling = new Date();
+  const [member] = await sql<Member[]>`select * from members where stripe_customer_id = ${stripeCustomerId} limit 1`;
+  if (!member) return null;
+  nextBilling.setDate(nextBilling.getDate() + (member.billing_cycle === "YEARLY" ? 365 : 30));
+  const rows = await sql<Member[]>`
+    update members set status = 'ACTIVE', next_billing_at = ${nextBilling}, updated_at = now()
+    where stripe_customer_id = ${stripeCustomerId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function markMemberPastDueByCustomerId(stripeCustomerId: string): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`
+    update members set status = 'PAST_DUE', updated_at = now()
+    where stripe_customer_id = ${stripeCustomerId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function markMemberCancelledBySubscriptionId(stripeSubscriptionId: string): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`
+    update members set status = 'CANCELLED', updated_at = now()
+    where stripe_subscription_id = ${stripeSubscriptionId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function syncMemberPlanBySubscriptionId(
+  stripeSubscriptionId: string,
+  plan: Plan,
+  billingCycle: BillingCycle
+): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`
+    update members set plan = ${plan}, billing_cycle = ${billingCycle}, updated_at = now()
+    where stripe_subscription_id = ${stripeSubscriptionId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+// ---- Password reset tokens ----
+
+export async function createPasswordResetToken(memberId: string, rawToken: string): Promise<void> {
+  await ensureSchema();
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+  await sql`
+    insert into password_reset_tokens (member_id, token_hash, expires_at)
+    values (${memberId}, ${hashToken(rawToken)}, ${expiresAt})
+  `;
+}
+
+/** Verifies + burns a reset token. Returns the member id if valid, else null. */
+export async function consumePasswordResetToken(rawToken: string): Promise<string | null> {
+  await ensureSchema();
+  const tokenHash = hashToken(rawToken);
+  const rows = await sql<{ id: string; member_id: string }[]>`
+    select id, member_id from password_reset_tokens
+    where token_hash = ${tokenHash} and used_at is null and expires_at > now()
+    limit 1
+  `;
+  const row = rows[0];
+  if (!row) return null;
+  await sql`update password_reset_tokens set used_at = now() where id = ${row.id}`;
+  return row.member_id;
 }
 
 export async function listMembers(): Promise<Member[]> {
@@ -104,7 +222,7 @@ export async function getAdminStats() {
   await ensureSchema();
   const [{ total }] = await sql<{ total: string }[]>`select count(*)::text as total from members where role = 'CLIENT'`;
   const byPlan = await sql<{ plan: Plan; count: string }[]>`
-    select plan, count(*)::text as count from members where role = 'CLIENT' group by plan
+    select plan, count(*)::text as count from members where role = 'CLIENT' and status = 'ACTIVE' group by plan
   `;
   const [{ past_due }] = await sql<{ past_due: string }[]>`
     select count(*)::text as past_due from members where role = 'CLIENT' and status = 'PAST_DUE'

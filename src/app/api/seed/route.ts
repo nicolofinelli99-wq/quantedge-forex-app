@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { countStrategies, createStrategy, ensureSchema, createOrUpdateMemberFromCheckout } from "@/lib/data";
+import { countStrategies, createStrategy, ensureSchema } from "@/lib/data";
 import { sql } from "@/lib/db";
 
 const SAMPLE_STRATEGIES = [
