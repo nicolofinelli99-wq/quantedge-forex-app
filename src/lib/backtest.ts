@@ -20,7 +20,7 @@ export interface BacktestStrategy {
 export const BACKTEST_STRATEGIES: BacktestStrategy[] = [
   {
     key: "STRAT_1",
-    name: "Strategy 1",
+    name: "Research",
     yearlyR: [
       { year: 2021, r: 81 },
       { year: 2022, r: 64 },
@@ -32,7 +32,7 @@ export const BACKTEST_STRATEGIES: BacktestStrategy[] = [
   },
   {
     key: "STRAT_2",
-    name: "Strategy 2",
+    name: "Strategy",
     yearlyR: [
       { year: 2021, r: 36 },
       { year: 2022, r: 33 },
@@ -44,7 +44,7 @@ export const BACKTEST_STRATEGIES: BacktestStrategy[] = [
   },
   {
     key: "STRAT_3",
-    name: "Strategy 3",
+    name: "Complete",
     yearlyR: [
       { year: 2021, r: 71 },
       { year: 2022, r: 74 },
