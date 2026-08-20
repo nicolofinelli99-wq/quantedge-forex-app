@@ -13,10 +13,10 @@ function formatUSD(n: number): string {
 
 const DEPOSIT_PRESETS = [1000, 5000, 10000, 25000, 50000, 100000];
 
-const PLAN_STYLE: Record<string, { badge: string; accent: string; featured: boolean }> = {
-  "Strategy A": { badge: "text-accent3 bg-accent3/10 border-accent3/25", accent: "text-accent3", featured: false },
-  "Strategy B": { badge: "text-accent bg-accent/10 border-accent/25", accent: "text-accent", featured: true },
-  "Strategy C": { badge: "text-[#ecd9ff] bg-accent2/15 border-accent2/30", accent: "text-[#e2d3ff]", featured: false },
+const PLAN_STYLE: Record<string, { badge: string; accent: string }> = {
+  "Strategy A": { badge: "text-accent3 bg-accent3/10 border-accent3/25", accent: "text-accent3" },
+  "Strategy B": { badge: "text-accent bg-accent/10 border-accent/25", accent: "text-accent" },
+  "Strategy C": { badge: "text-[#ecd9ff] bg-accent2/15 border-accent2/30", accent: "text-[#e2d3ff]" },
 };
 
 export function ROICalculator() {
@@ -122,19 +122,7 @@ export function ROICalculator() {
             const style = PLAN_STYLE[strategy.name] ?? PLAN_STYLE["Strategy A"];
             return (
               <Reveal key={strategy.key} delay={i * 0.08}>
-                <Card
-                  className={clsx(
-                    "relative flex h-full flex-col p-6",
-                    style.featured &&
-                      "border-accent/40 bg-gradient-to-b from-accent/[0.06] to-surface shadow-[0_30px_60px_-20px_rgba(214,106,238,0.25)] md:scale-[1.03]"
-                  )}
-                >
-                  {style.featured && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-br from-accent to-accent3 px-3.5 py-1 text-[11px] font-bold tracking-wide text-[#04150f]">
-                      MOST POPULAR
-                    </span>
-                  )}
-
+                <Card className="relative flex h-full flex-col p-6">
                   <span className={clsx("mb-4 inline-flex w-fit items-center rounded-full border px-3 py-1 text-[12px] font-semibold", style.badge)}>
                     {strategy.name}
                   </span>
