@@ -2,6 +2,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { SampleStrategy } from "@/components/landing/SampleStrategy";
+import { ROICalculator } from "@/components/landing/ROICalculator";
 import { Pricing } from "@/components/landing/Pricing";
 import { Compare } from "@/components/landing/Compare";
 import { Testimonials } from "@/components/landing/Testimonials";
@@ -18,6 +19,7 @@ export default function Home() {
       <Hero />
       <HowItWorks />
       <SampleStrategy />
+      <ROICalculator />
       <Pricing />
       <Compare />
       <Testimonials />
