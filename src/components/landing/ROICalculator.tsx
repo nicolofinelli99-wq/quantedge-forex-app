@@ -14,9 +14,9 @@ function formatUSD(n: number): string {
 const DEPOSIT_PRESETS = [1000, 5000, 10000, 25000, 50000, 100000];
 
 const PLAN_STYLE: Record<string, { badge: string; accent: string; featured: boolean }> = {
-  Research: { badge: "text-accent3 bg-accent3/10 border-accent3/25", accent: "text-accent3", featured: false },
-  Strategy: { badge: "text-accent bg-accent/10 border-accent/25", accent: "text-accent", featured: true },
-  Complete: { badge: "text-[#ecd9ff] bg-accent2/15 border-accent2/30", accent: "text-[#e2d3ff]", featured: false },
+  "Strategy A": { badge: "text-accent3 bg-accent3/10 border-accent3/25", accent: "text-accent3", featured: false },
+  "Strategy B": { badge: "text-accent bg-accent/10 border-accent/25", accent: "text-accent", featured: true },
+  "Strategy C": { badge: "text-[#ecd9ff] bg-accent2/15 border-accent2/30", accent: "text-[#e2d3ff]", featured: false },
 };
 
 export function ROICalculator() {
@@ -119,7 +119,7 @@ export function ROICalculator() {
 
         <div className="grid gap-5 md:grid-cols-3">
           {perStrategy.map(({ strategy, byYear, average, drawdown }, i) => {
-            const style = PLAN_STYLE[strategy.name] ?? PLAN_STYLE.Research;
+            const style = PLAN_STYLE[strategy.name] ?? PLAN_STYLE["Strategy A"];
             return (
               <Reveal key={strategy.key} delay={i * 0.08}>
                 <Card
