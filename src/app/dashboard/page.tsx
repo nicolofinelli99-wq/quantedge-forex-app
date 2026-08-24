@@ -64,7 +64,16 @@ export default async function DashboardPage({
                 </div>
               </div>
             </div>
-            {member.stripe_customer_id && <ManageBillingButton className="mb-3 w-full rounded-[10px] border border-edge2 bg-white/[0.02] px-3.5 py-2.5 text-[12.5px] font-semibold text-ink hover:bg-white/[0.06]" />}
+            {member.paddle_update_payment_method_url ? (
+              <a
+                href={member.paddle_update_payment_method_url}
+                className="mb-3 block w-full rounded-[10px] border border-edge2 bg-white/[0.02] px-3.5 py-2.5 text-center text-[12.5px] font-semibold text-ink hover:bg-white/[0.06]"
+              >
+                Manage billing
+              </a>
+            ) : (
+              member.stripe_customer_id && <ManageBillingButton className="mb-3 w-full rounded-[10px] border border-edge2 bg-white/[0.02] px-3.5 py-2.5 text-[12.5px] font-semibold text-ink hover:bg-white/[0.06]" />
+            )}
             {demoMode && <SelfStatusToggle initialActive={member.status === "ACTIVE"} />}
             <form action="/api/auth/logout" method="POST" className="mt-3">
               <button className="w-full rounded-[10px] px-3 py-2 text-left text-[12.5px] text-faint hover:text-ink">
@@ -149,7 +158,14 @@ export default async function DashboardPage({
               </div>
               <h4 className="mb-2 text-[17px]">{lockedHeading(member.status)}</h4>
               <p className="mb-5 text-[13.5px] leading-relaxed text-dim">{lockedBody(member.status)}</p>
-              {member.status === "PAST_DUE" && member.stripe_customer_id ? (
+              {member.status === "PAST_DUE" && member.paddle_update_payment_method_url ? (
+                <a
+                  href={member.paddle_update_payment_method_url}
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3 text-[14.5px] font-semibold text-[#04150f]"
+                >
+                  Update payment method
+                </a>
+              ) : member.status === "PAST_DUE" && member.stripe_customer_id ? (
                 <ManageBillingButton className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent3 px-6 py-3 text-[14.5px] font-semibold text-[#04150f]" />
               ) : (
                 <a

@@ -20,6 +20,10 @@ export interface Member {
   password_hash: string | null;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
+  paddle_customer_id: string | null;
+  paddle_subscription_id: string | null;
+  paddle_update_payment_method_url: string | null;
+  paddle_cancel_url: string | null;
 }
 
 export interface Strategy {
@@ -174,6 +178,106 @@ export async function syncMemberPlanBySubscriptionId(
   const rows = await sql<Member[]>`
     update members set plan = ${plan}, billing_cycle = ${billingCycle}, updated_at = now()
     where stripe_subscription_id = ${stripeSubscriptionId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+// ---- Paddle billing (parallel to the Stripe functions above — the client's
+// bank is in Albania, which Stripe doesn't support, so Paddle is the primary
+// processor here; Stripe code is left in place in case that ever changes) ----
+
+export async function setMemberPaddleCustomerId(memberId: string, paddleCustomerId: string): Promise<void> {
+  await ensureSchema();
+  await sql`update members set paddle_customer_id = ${paddleCustomerId}, updated_at = now() where id = ${memberId}`;
+}
+
+export async function activateMemberFromPaddleCheckout(input: {
+  memberId: string;
+  plan: Plan;
+  billingCycle: BillingCycle;
+  paddleCustomerId: string;
+  paddleSubscriptionId: string;
+  updatePaymentMethodUrl?: string;
+  cancelUrl?: string;
+}): Promise<Member | null> {
+  await ensureSchema();
+  const nextBilling = new Date();
+  nextBilling.setDate(nextBilling.getDate() + (input.billingCycle === "YEARLY" ? 365 : 30));
+  const rows = await sql<Member[]>`
+    update members set
+      plan = ${input.plan},
+      billing_cycle = ${input.billingCycle},
+      status = 'ACTIVE',
+      paddle_customer_id = ${input.paddleCustomerId},
+      paddle_subscription_id = ${input.paddleSubscriptionId},
+      paddle_update_payment_method_url = coalesce(${input.updatePaymentMethodUrl ?? null}, paddle_update_payment_method_url),
+      paddle_cancel_url = coalesce(${input.cancelUrl ?? null}, paddle_cancel_url),
+      next_billing_at = ${nextBilling},
+      updated_at = now()
+    where id = ${input.memberId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function updateMemberPaddleManagementUrls(
+  paddleSubscriptionId: string,
+  urls: { updatePaymentMethodUrl?: string; cancelUrl?: string }
+): Promise<void> {
+  await ensureSchema();
+  await sql`
+    update members set
+      paddle_update_payment_method_url = coalesce(${urls.updatePaymentMethodUrl ?? null}, paddle_update_payment_method_url),
+      paddle_cancel_url = coalesce(${urls.cancelUrl ?? null}, paddle_cancel_url),
+      updated_at = now()
+    where paddle_subscription_id = ${paddleSubscriptionId}
+  `;
+}
+
+export async function markMemberActiveRenewalByPaddleSubscriptionId(paddleSubscriptionId: string): Promise<Member | null> {
+  await ensureSchema();
+  const nextBilling = new Date();
+  const [member] = await sql<Member[]>`select * from members where paddle_subscription_id = ${paddleSubscriptionId} limit 1`;
+  if (!member) return null;
+  nextBilling.setDate(nextBilling.getDate() + (member.billing_cycle === "YEARLY" ? 365 : 30));
+  const rows = await sql<Member[]>`
+    update members set status = 'ACTIVE', next_billing_at = ${nextBilling}, updated_at = now()
+    where paddle_subscription_id = ${paddleSubscriptionId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function markMemberPastDueByPaddleSubscriptionId(paddleSubscriptionId: string): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`
+    update members set status = 'PAST_DUE', updated_at = now()
+    where paddle_subscription_id = ${paddleSubscriptionId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function markMemberCancelledByPaddleSubscriptionId(paddleSubscriptionId: string): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`
+    update members set status = 'CANCELLED', updated_at = now()
+    where paddle_subscription_id = ${paddleSubscriptionId}
+    returning *
+  `;
+  return rows[0] ?? null;
+}
+
+export async function syncMemberPlanByPaddleSubscriptionId(
+  paddleSubscriptionId: string,
+  plan: Plan,
+  billingCycle: BillingCycle
+): Promise<Member | null> {
+  await ensureSchema();
+  const rows = await sql<Member[]>`
+    update members set plan = ${plan}, billing_cycle = ${billingCycle}, updated_at = now()
+    where paddle_subscription_id = ${paddleSubscriptionId}
     returning *
   `;
   return rows[0] ?? null;

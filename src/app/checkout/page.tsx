@@ -5,6 +5,8 @@ import { getMemberById, getPlanPrices } from "@/lib/data";
 import { getSessionMemberId } from "@/lib/session";
 import { Plan, BillingCycle } from "@/lib/plans";
 import { ContinueToPayment } from "@/components/checkout/ContinueToPayment";
+import { PaddleCheckoutButton } from "@/components/checkout/PaddleCheckoutButton";
+import { isPaddleConfigured, getPaddleClientToken, getPaddleEnvironment, getPaddlePriceId } from "@/lib/paddle";
 
 function planLabel(plan: string): string {
   return plan.charAt(0) + plan.slice(1).toLowerCase();
@@ -28,6 +30,11 @@ export default async function CheckoutPage({
   const prices = await getPlanPrices();
   const price = prices[plan];
   const amount = cycle === "YEARLY" ? price.yearly : price.monthly;
+
+  // Paddle is the primary processor for this client (their bank is in Albania,
+  // which Stripe doesn't support) — use it whenever it's configured, falling
+  // back to Stripe's hosted checkout otherwise.
+  const paddleReady = isPaddleConfigured();
 
   return (
     <div className="flex min-h-screen items-center justify-center px-5 py-16">
@@ -58,11 +65,23 @@ export default async function CheckoutPage({
           </p>
         )}
 
-        <ContinueToPayment plan={plan} cycle={cycle} />
+        {paddleReady ? (
+          <PaddleCheckoutButton
+            plan={plan}
+            cycle={cycle}
+            priceId={getPaddlePriceId(plan, cycle)}
+            clientToken={getPaddleClientToken()!}
+            environment={getPaddleEnvironment()}
+            memberId={member.id}
+            email={member.email}
+          />
+        ) : (
+          <ContinueToPayment plan={plan} cycle={cycle} />
+        )}
 
         <p className="mt-5 text-center text-[11.5px] text-faint">
-          You&apos;ll be redirected to Stripe&apos;s secure hosted checkout. Auto-renews every billing
-          cycle — cancel anytime from your dashboard.
+          You&apos;ll be redirected to a secure hosted checkout. Auto-renews every billing cycle —
+          cancel anytime from your dashboard.
         </p>
       </Card>
     </div>

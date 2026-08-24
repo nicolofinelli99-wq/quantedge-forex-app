@@ -6,7 +6,46 @@ is **flip-a-switch** work — no more code changes needed, just pasting values i
 Vercel's environment variables (Project → Settings → Environment Variables) and
 redeploying.
 
-## 1. Stripe (payments)
+## 1. Paddle (payments — primary processor for this client)
+
+Stripe doesn't support payouts to Albanian bank accounts, so Paddle is the processor
+actually wired up as primary here (Stripe integration is still in the codebase as a
+fallback — see section 1b — in case that ever changes).
+
+1. In the Paddle dashboard, create 3 products (Research / Strategy / Complete), each
+   with a Monthly and a Yearly recurring **Price** at these exact amounts (USD):
+
+   | Plan     | Monthly | Yearly |
+   |----------|---------|--------|
+   | Research | $20     | $200   |
+   | Strategy | $40     | $400   |
+   | Complete | $50     | $500   |
+
+2. Copy each Price ID (`pri_...`) into the matching Vercel env var:
+   `PADDLE_PRICE_RESEARCH_MONTHLY`, `PADDLE_PRICE_RESEARCH_YEARLY`,
+   `PADDLE_PRICE_STRATEGY_MONTHLY`, `PADDLE_PRICE_STRATEGY_YEARLY`,
+   `PADDLE_PRICE_COMPLETE_MONTHLY`, `PADDLE_PRICE_COMPLETE_YEARLY`.
+3. **Developer tools → Authentication** → create a **client-side token** → paste into
+   `PADDLE_CLIENT_TOKEN` (safe to expose to the browser, it can only open checkouts).
+4. **Developer tools → Notifications** → add a notification destination of type
+   **URL**, pointing at `https://<your-domain>/api/paddle/webhook`. Subscribe to:
+   `subscription.activated`, `subscription.updated`, `subscription.past_due`,
+   `subscription.canceled`, `transaction.completed`, `transaction.payment_failed`.
+   Copy its **secret key** into `PADDLE_WEBHOOK_SECRET_KEY`.
+5. Set `PADDLE_ENVIRONMENT` to `sandbox` while testing with a Paddle sandbox account,
+   or `production` (or just leave it unset) once using real Paddle price IDs.
+6. **Checkout → Checkout settings → Default payment link** → set it to your live
+   domain (required for the checkout overlay to open at all).
+7. Redeploy. Checkout (via Paddle's overlay, opened client-side — no page redirect),
+   activation, renewals, failed-payment suspension, cancellation, and the "Manage
+   billing" / "Update payment method" links in the dashboard are all handled
+   automatically by `src/app/api/paddle/webhook/route.ts`.
+
+Until `PADDLE_CLIENT_TOKEN` is set, the checkout page falls back to the Stripe flow
+below (which itself shows a friendly "payments aren't set up yet" message if that's
+not configured either — nothing breaks either way).
+
+## 1b. Stripe (fallback processor, not used for this client)
 
 1. Create/log into the client's Stripe account.
 2. **Product catalog** → create 3 products: *Research*, *Strategy*, *Complete*.

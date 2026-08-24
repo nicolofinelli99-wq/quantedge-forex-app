@@ -7,7 +7,7 @@ const notes = [
   },
   {
     title: "Payment gateway",
-    body: "Not connected yet. The site is built to plug into Stripe out of the box; if a different processor is used instead (Paddle, PayPal, a local gateway), only the checkout/webhook integration needs to be swapped — everything else (accounts, emails, access control) stays the same.",
+    body: "Paddle is the primary processor (Stripe isn't available for this client's bank country). Once PADDLE_CLIENT_TOKEN, PADDLE_WEBHOOK_SECRET_KEY, and the six PADDLE_PRICE_* price IDs are set in Vercel, checkout and billing management go live automatically — the Stripe integration is still in the codebase as a fallback and can be re-enabled by setting the Stripe env vars instead.",
   },
   {
     title: "Access control",

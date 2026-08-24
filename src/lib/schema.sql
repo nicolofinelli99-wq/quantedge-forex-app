@@ -55,3 +55,10 @@ insert into plan_prices (plan, monthly, yearly) values
   ('STRATEGY', 40, 400),
   ('COMPLETE', 50, 500)
 on conflict (plan) do nothing;
+
+alter table members add column if not exists paddle_customer_id text;
+alter table members add column if not exists paddle_subscription_id text;
+alter table members add column if not exists paddle_update_payment_method_url text;
+alter table members add column if not exists paddle_cancel_url text;
+create unique index if not exists members_paddle_customer_id_idx on members (paddle_customer_id) where paddle_customer_id is not null;
+create unique index if not exists members_paddle_subscription_id_idx on members (paddle_subscription_id) where paddle_subscription_id is not null;
