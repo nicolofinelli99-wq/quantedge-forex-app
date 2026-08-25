@@ -25,17 +25,17 @@ export function Footer() {
             <h5 className="mb-4 text-xs uppercase tracking-wide text-faint">Company</h5>
             <ul className="space-y-2.5 text-[14px] text-dim">
               <li><a href="/login" className="hover:text-ink">Sign in</a></li>
-              <li><a href="#" className="hover:text-ink">Contact</a></li>
+              <li><a href="mailto:support@be4trading.com" className="hover:text-ink">Contact</a></li>
               <li><a href="#" className="hover:text-ink">Telegram</a></li>
             </ul>
           </div>
           <div>
             <h5 className="mb-4 text-xs uppercase tracking-wide text-faint">Legal</h5>
             <ul className="space-y-2.5 text-[14px] text-dim">
-              <li><a href="#" className="hover:text-ink">Terms of use</a></li>
-              <li><a href="#" className="hover:text-ink">Privacy policy</a></li>
-              <li><a href="#" className="hover:text-ink">Refund policy</a></li>
-              <li><a href="#" className="hover:text-ink">Risk disclosure</a></li>
+              <li><a href="/terms" className="hover:text-ink">Terms of use</a></li>
+              <li><a href="/privacy" className="hover:text-ink">Privacy policy</a></li>
+              <li><a href="/refund-policy" className="hover:text-ink">Refund policy</a></li>
+              <li><a href="/risk-disclosure" className="hover:text-ink">Risk disclosure</a></li>
             </ul>
           </div>
         </div>
