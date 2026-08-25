@@ -15,6 +15,14 @@ function makeClient() {
     max: 5,
     idle_timeout: 20,
     connect_timeout: 10,
+    // Vercel's DATABASE_URL runs through a connection pooler (PgBouncer-style,
+    // Neon-backed). Server-side prepared statements don't play well with that:
+    // if we run an ALTER TABLE (via ensureSchema()) and a pooled session later
+    // reuses a plan prepared before the change, Postgres throws "cached plan
+    // must not change result type" and every query on that route starts
+    // 500ing. Disabling prepared statements avoids this entirely — this is
+    // the standard fix recommended for postgres.js behind a pooler.
+    prepare: false,
   });
 }
 
