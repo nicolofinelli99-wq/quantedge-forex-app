@@ -62,3 +62,5 @@ alter table members add column if not exists paddle_update_payment_method_url te
 alter table members add column if not exists paddle_cancel_url text;
 create unique index if not exists members_paddle_customer_id_idx on members (paddle_customer_id) where paddle_customer_id is not null;
 create unique index if not exists members_paddle_subscription_id_idx on members (paddle_subscription_id) where paddle_subscription_id is not null;
+
+alter table strategies add column if not exists youtube_url text;

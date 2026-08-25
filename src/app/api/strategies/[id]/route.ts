@@ -8,7 +8,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json().catch(() => null);
-  const { title, instrument, type, bias, excerpt, fullBody, minPlan } = (body ?? {}) as {
+  const { title, instrument, type, bias, excerpt, fullBody, minPlan, youtubeUrl } = (body ?? {}) as {
     title: string;
     instrument?: string;
     type: string;
@@ -16,6 +16,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     excerpt: string;
     fullBody: string;
     minPlan: Plan;
+    youtubeUrl?: string;
   };
 
   if (!title || !type || !excerpt || !fullBody) {
@@ -30,6 +31,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     excerpt,
     body: fullBody,
     minPlan: minPlan ?? "RESEARCH",
+    youtubeUrl,
   });
 
   if (!strategy) return NextResponse.json({ error: "Strategy not found" }, { status: 404 });

@@ -28,7 +28,10 @@ export default async function PublishPage() {
               <div key={s.id} className="rounded-[12px] border border-edge2 bg-white/[0.035] p-4 transition-colors hover:bg-white/[0.05]">
                 <div className="mb-1.5 flex items-start justify-between gap-2">
                   <div className="text-[13.5px] font-semibold leading-snug">{s.title}</div>
-                  <Badge tone="purple">{s.type}</Badge>
+                  <div className="flex flex-shrink-0 gap-1.5">
+                    {s.youtube_url && <Badge tone="amber">▶ Video</Badge>}
+                    <Badge tone="purple">{s.type}</Badge>
+                  </div>
                 </div>
                 <p className="mb-2.5 line-clamp-2 text-[12.5px] text-dim">{s.excerpt}</p>
                 <div className="flex items-center justify-between gap-2">

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { title, instrument, type, bias, excerpt, fullBody, minPlan } = body as {
+  const { title, instrument, type, bias, excerpt, fullBody, minPlan, youtubeUrl } = body as {
     title: string;
     instrument?: string;
     type: string;
@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
     excerpt: string;
     fullBody: string;
     minPlan: Plan;
+    youtubeUrl?: string;
   };
 
   if (!title || !type || !excerpt || !fullBody) {
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
     excerpt,
     body: fullBody,
     minPlan: minPlan ?? "RESEARCH",
+    youtubeUrl,
   });
 
   return NextResponse.json({ ok: true, strategy });

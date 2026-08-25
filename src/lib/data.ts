@@ -37,6 +37,7 @@ export interface Strategy {
   min_plan: Plan;
   author: string;
   published_at: Date;
+  youtube_url: string | null;
 }
 
 let schemaReady: Promise<void> | null = null;
@@ -451,11 +452,12 @@ export async function createStrategy(input: {
   excerpt: string;
   body: string;
   minPlan: Plan;
+  youtubeUrl?: string;
 }): Promise<Strategy> {
   await ensureSchema();
   const rows = await sql<Strategy[]>`
-    insert into strategies (title, instrument, type, bias, excerpt, body, min_plan)
-    values (${input.title}, ${input.instrument ?? null}, ${input.type}, ${input.bias ?? null}, ${input.excerpt}, ${input.body}, ${input.minPlan})
+    insert into strategies (title, instrument, type, bias, excerpt, body, min_plan, youtube_url)
+    values (${input.title}, ${input.instrument ?? null}, ${input.type}, ${input.bias ?? null}, ${input.excerpt}, ${input.body}, ${input.minPlan}, ${input.youtubeUrl || null})
     returning *
   `;
   return rows[0];
@@ -484,6 +486,7 @@ export async function updateStrategy(
     excerpt: string;
     body: string;
     minPlan: Plan;
+    youtubeUrl?: string;
   }
 ): Promise<Strategy | null> {
   await ensureSchema();
@@ -495,7 +498,8 @@ export async function updateStrategy(
       bias = ${input.bias ?? null},
       excerpt = ${input.excerpt},
       body = ${input.body},
-      min_plan = ${input.minPlan}
+      min_plan = ${input.minPlan},
+      youtube_url = ${input.youtubeUrl || null}
     where id = ${id}
     returning *
   `;

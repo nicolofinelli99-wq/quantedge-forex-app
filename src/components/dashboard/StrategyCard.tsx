@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import type { Strategy } from "@/lib/data";
+import { getYouTubeEmbedUrl } from "@/lib/youtube";
 
 const biasTone: Record<string, "green" | "red" | "grey"> = {
   BUY: "green",
@@ -10,6 +11,7 @@ const biasTone: Record<string, "green" | "red" | "grey"> = {
 
 export function StrategyCard({ strategy, locked }: { strategy: Strategy; locked: boolean }) {
   const [open, setOpen] = useState(false);
+  const embedUrl = strategy.youtube_url ? getYouTubeEmbedUrl(strategy.youtube_url) : null;
 
   return (
     <div className="relative mb-3.5 overflow-hidden rounded-[13px] border border-edge2 bg-white/[0.035] p-4.5">
@@ -25,6 +27,19 @@ export function StrategyCard({ strategy, locked }: { strategy: Strategy; locked:
         {open && (
           <div className="mt-2.5 whitespace-pre-line border-t border-dashed border-edge pt-3 text-[13.5px] leading-relaxed text-dim">
             {strategy.body}
+          </div>
+        )}
+        {open && strategy.youtube_url && embedUrl && (
+          <div className="mt-3.5 overflow-hidden rounded-[10px] border border-edge2">
+            <div className="relative aspect-video w-full">
+              <iframe
+                src={embedUrl}
+                title={strategy.title}
+                className="absolute inset-0 h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
           </div>
         )}
         <button

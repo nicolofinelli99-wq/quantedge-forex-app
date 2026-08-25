@@ -14,6 +14,7 @@ export function PublishForm({ mode = "create", strategy }: { mode?: Mode; strate
   const [excerpt, setExcerpt] = useState(strategy?.excerpt ?? "");
   const [fullBody, setFullBody] = useState(strategy?.body ?? "");
   const [minPlan, setMinPlan] = useState(strategy?.min_plan ?? "RESEARCH");
+  const [youtubeUrl, setYoutubeUrl] = useState(strategy?.youtube_url ?? "");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
@@ -30,7 +31,7 @@ export function PublishForm({ mode = "create", strategy }: { mode?: Mode; strate
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, instrument, type, bias, excerpt, fullBody, minPlan }),
+      body: JSON.stringify({ title, instrument, type, bias, excerpt, fullBody, minPlan, youtubeUrl }),
     });
     setSubmitting(false);
 
@@ -44,6 +45,7 @@ export function PublishForm({ mode = "create", strategy }: { mode?: Mode; strate
       setInstrument("");
       setExcerpt("");
       setFullBody("");
+      setYoutubeUrl("");
       setDone(true);
       router.refresh();
       setTimeout(() => setDone(false), 2500);
@@ -97,6 +99,19 @@ export function PublishForm({ mode = "create", strategy }: { mode?: Mode; strate
       <div className="sm:col-span-2">
         <label className="mb-2 block text-[12.5px] font-medium text-dim">Full strategy write-up</label>
         <textarea required className={inputClass + " min-h-[160px] resize-y"} value={fullBody} onChange={(e) => setFullBody(e.target.value)} placeholder="Write the full analysis: context, reasoning, key levels and risk plan…" />
+      </div>
+      <div className="sm:col-span-2">
+        <label className="mb-2 block text-[12.5px] font-medium text-dim">YouTube video (optional)</label>
+        <input
+          className={inputClass}
+          value={youtubeUrl}
+          onChange={(e) => setYoutubeUrl(e.target.value)}
+          placeholder="e.g. https://www.youtube.com/watch?v=..."
+        />
+        <p className="mt-1.5 text-[11.5px] text-faint">
+          Paste any YouTube link (watch, youtu.be, or shorts) — it&apos;ll be embedded as a player
+          under the write-up. Leave blank for no video.
+        </p>
       </div>
       <div className="sm:col-span-2 flex items-center gap-3">
         <button
