@@ -74,6 +74,19 @@ export default async function DashboardPage({
             ) : (
               member.stripe_customer_id && <ManageBillingButton className="mb-3 w-full rounded-[10px] border border-edge2 bg-white/[0.02] px-3.5 py-2.5 text-[12.5px] font-semibold text-ink hover:bg-white/[0.06]" />
             )}
+            {/* Stripe's ManageBillingButton opens the Stripe customer portal, which
+                already includes a cancel option — but Paddle's "update payment
+                method" link doesn't, so Paddle subscribers need this separate
+                cancel_url (also from the webhook's management_urls) to actually
+                be able to cancel from here, matching what the FAQ promises. */}
+            {member.paddle_cancel_url && (member.status === "ACTIVE" || member.status === "PAST_DUE") && (
+              <a
+                href={member.paddle_cancel_url}
+                className="mb-3 block w-full text-center text-[11.5px] text-faint hover:text-danger"
+              >
+                Cancel subscription
+              </a>
+            )}
             {demoMode && <SelfStatusToggle initialActive={member.status === "ACTIVE"} />}
             <form action="/api/auth/logout" method="POST" className="mt-3">
               <button className="w-full rounded-[10px] px-3 py-2 text-left text-[12.5px] text-faint hover:text-ink">
